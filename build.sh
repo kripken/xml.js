@@ -1,3 +1,3 @@
 cd libxml2-2.7.8
-~/Dev/emscripten/emmake make -j 4
+~/Dev/emscripten/emmake make
 
