@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir -p ./build
+mkdir -p ./libxml2/m4
 cd ./libxml2
 autoreconf -if -Wall
 cd ../build
