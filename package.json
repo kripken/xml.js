@@ -15,11 +15,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sterpe/xml.js"
+    "url": "https://github.com/kripken/xml.js"
   },
   "author": "",
   "license": "BSD-2-Clause",
   "bugs": {
-    "url": "https://github.com/sterpe/xml.js/issues"
+    "url": "https://github.com/kripken/xml.js/issues"
   }
 }
