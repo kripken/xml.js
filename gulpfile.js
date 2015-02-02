@@ -13,9 +13,14 @@ gulp.task('mkdir -p ./build', ['rm -rf ./build'],
 		mkdirp('./build', cb);
 });
 
-gulp.task('rm -rf ./libxml2/m4', ['mkdir -p ./build'],
+gulp.task('rm -rf ./libxml2/m4', [],
 	function (cb) {
 		rimraf('./libxml2/m4', cb);
+});
+
+gulp.task('rm -rf ./libxml2/compile', [],
+	function (cb) {
+		rimraf('./libxml2/compile', cb);
 });
 
 gulp.task('mkdir -p ./libxml2/m4', ['rm -rf ./libxml2/m4'],
@@ -25,7 +30,8 @@ gulp.task('mkdir -p ./libxml2/m4', ['rm -rf ./libxml2/m4'],
 
 gulp.task('clean', [
 	'rm -rf ./build',
-	'rm -rf ./libxml2/m4'
+	'rm -rf ./libxml2/m4',
+	'rm -rf ./libxml2/compile'
 ]);
 
 gulp.task('mkdirs', [
