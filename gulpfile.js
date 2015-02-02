@@ -39,26 +39,39 @@ gulp.task('mkdirs', [
 	'mkdir -p ./libxml2/m4'
 ]);
 
-gulp.task('compile-libxml2', ['clean', 'mkdirs'], function (cb) {
+gulp.task('libxml2', ['clean', 'mkdirs'], function (cb) {
 	child_process.spawn('./script/libxml2', [], {
 		stdio: 'inherit'
 	}).on('close', cb);
 });
+
 gulp.task('compile-test', [], function (cb) {
-	console.log(process.cwd());
 	child_process.spawn('emcc', [
 		'-O2',
-		'-s EMULATE_FUNCTION_POINTER_CASTS=1',
+		'-s',
+		'EMULATE_FUNCTION_POINTER_CASTS=1',
 		'./build/xmllint.o',
 		'./build/.libs/libxml2.a',
 		'./libz.a',
-		'-o xmllint.test.js',
+		'-o',
+		'./build/xmllint.test.js',
 		'--embed-file',
 		'./test/test.xml',
 		'--embed-file',
 		'./test/test.xsd'
 	], {
-		cwd: process.cwd(),
+		stdio: 'inherit'
+	}).on('close', cb);
+});
+
+gulp.task('test', ['compile-test'], function (cb) {
+	child_process.spawn('node', [
+		'./build/xmllint.test.js',
+		'--noout',
+		'--schema',
+		'./test/test.xsd',
+		'./test/test.xml'
+	], {
 		stdio: 'inherit'
 	}).on('close', cb);
 });
