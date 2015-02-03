@@ -1,18 +1,16 @@
 #!/bin/bash
 
 emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
+	--memory-init-file 0 \
 	./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
 	-o xmllint.raw.js --pre-js ./src/pre.js
-echo "function validateXML(xml, schema) {" > xmllint.js
-echo "	var Module = {" >> xmllint.js
-echo "	xml: xml," >> xmllint.js
-echo "	schema: schema" >> xmllint.js
-echo "	};" >> xmllint.js
-cat xmllint.raw.js >> xmllint.js
-echo "	return Module.return;" >> xmllint.js
-echo "}" >> xmllint.js
-echo "$1"
+
+sed '/\/\* xmllint.raw.js \*\// {
+	r ./xmllint.raw.js
+	d
+}' < ./src/wrapper.js > ./xmllint.js
+
 if [[ "$1" == "--commonjs" ]]; then 
 	echo "module.exports.validateXML = validateXML;" >> xmllint.js
 fi
-rm -rf xmllint.raw.js xmllint.raw.js.mem
+
