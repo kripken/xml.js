@@ -1,4 +1,3 @@
-console.log(process.cwd());
 var fs = require('fs')
 , xmllint = require('../xmllint.js')
 , xml = fs.readFileSync('./test/test.xml').toString()
@@ -7,6 +6,6 @@ var fs = require('fs')
 
 
 console.log(xmllint.validateXML({
-	xml: xml,
+	xml: [xml, xml],
 	schema: [schema, schema]
 }));

@@ -14,3 +14,4 @@ if [[ "$1" == "--commonjs" ]]; then
 	echo "module.exports.validateXML = validateXML;" >> xmllint.js
 fi
 
+rm -rf xmllint.raw.js

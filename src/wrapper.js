@@ -7,5 +7,6 @@ function validateXML(options) {
 
 	/* xmllint.raw.js */
 
-	return Module.return;
+	Module['return'] = Module['return'].split('\n').slice(0,-1);
+	return Module['return'];
 }
