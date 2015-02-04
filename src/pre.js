@@ -28,8 +28,6 @@ Module.arguments = ['--noout'];
 	for (i = 0; i < Module['xml'].length; i++) {
 		Module.arguments.push('file_' + i + '.xml');
 	}
-	Module.arguments.push('--output');
-	Module.arguments.push('out.txt');
 }());
 
 Module['return'] = '';
