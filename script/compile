@@ -10,8 +10,4 @@ sed '/\/\* XMLLINT.RAW.JS \*\// {
 	d
 }' < ./src/wrapper.js > ./xmllint.js
 
-if [[ "$1" == "--commonjs" ]]; then 
-	echo "module.exports.validateXML = validateXML;" >> xmllint.js
-fi
-
 rm -rf xmllint.raw.js

@@ -22,7 +22,6 @@ gulp.task('test', [], function (cb) {
 
 gulp.task('compile', [], function (cb) {
 	spawn('./script/compile', [
-		'--commonjs'
 	], {
 		stdio: 'inherit'
 	}).on('close', cb);
