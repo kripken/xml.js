@@ -1,0 +1,18 @@
+<html>
+  <body>
+    <script src="../xmllint.js"></script>
+    <form onsubmit="console.log(xmllint.validateXML({ xml: xml.value, schema: schema.value}).errors); return false;">
+      XML: <textarea rows=10 cols=80 id="xml"></textarea>
+      <br>
+      Schema: <textarea rows=10 cols=80 id="schema"></textarea>
+      <br>
+      <input type="submit" value="validate">
+    </form>
+    <!-- browserify/browserify-shim bundle test:
+      expect to see:
+        Object { errors: null } 
+      in the console log.
+    -->
+    <script src="./bundle.js"></script>
+  </body>
+</html>
