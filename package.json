@@ -1,6 +1,6 @@
 {
   "name": "xmllint",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Online demo at http://syssgx.github.com/xml.js/",
   "main": "xmllint.js",
   "directories": {
@@ -13,12 +13,6 @@
     "browserify": "~8.1.3",
     "browserify-shim": "~3.8.2"
   },
-  "browserify": {
-    "transform": [
-      "browserify-shim",
-      "brfs"
-    ]
-  },
   "browserify-shim": {
     "xmllint": "global:xmllint"
   },
@@ -27,11 +21,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sterpe/xml.js"
+    "url": "https://github.com/kripken/xml.js"
   },
-  "author": "",
+  "author": "kripken",
+  "contributors": [
+    "kripken",
+    "sterpe"
+  ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/sterpe/xml.js/issues"
+    "url": "https://github.com/kripken/xml.js/issues"
   }
 }
