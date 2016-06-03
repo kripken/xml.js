@@ -4,7 +4,8 @@ var xmllint = {}
 xmllint.validateXML = function (options) {
 	var Module = {
 		xml: options.xml,
-		schema: options.schema
+		schema: options.schema,
+		TOTAL_MEMORY: options.TOTAL_MEMORY
 	}
 	;
 
