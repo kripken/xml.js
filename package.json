@@ -1,6 +1,6 @@
 {
   "name": "xmllint",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Online demo at http://syssgx.github.com/xml.js/",
   "main": "xmllint.js",
   "directories": {
