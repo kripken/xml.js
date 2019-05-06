@@ -23,7 +23,7 @@ Module.arguments = ['--noout'];
 		Module['xml'] = [Module['xml']];
 	}
 	for (i = 0; i < Module['schema'].length; i++) {
-		Module.arguments.push('--schema');
+		Module.arguments.push(Module['extension']);
 		Module.arguments.push('file_' + i + '.xsd');
 	}
 	for (i = 0; i < (1 || Module['xml'].length); i++) {
