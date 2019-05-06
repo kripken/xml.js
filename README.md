@@ -1,3 +1,8 @@
+This branch adds an optional field to the options given to the validateXML function.
+If the user adds a field "format" with the content "rng", then the
+argument used will be "--relaxng" instead of "--schema". Otherwise
+"--schema" is used.
+
 
 Online demo at http://syssgx.github.com/xml.js/
 
