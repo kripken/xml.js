@@ -8,6 +8,11 @@ xmllint.validateXML = function (options) {
 		TOTAL_MEMORY: options.TOTAL_MEMORY
 	}
 	;
+  if (options.format === 'rng') {
+		Module['extension'] = '--relaxng';
+	} else {
+		Module['extension'] = '--schema';
+	}
 
 	/* XMLLINT.RAW.JS */
 
