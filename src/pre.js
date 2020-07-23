@@ -34,5 +34,6 @@ Module.arguments = ['--noout'];
 Module['return'] = '';
 
 Module['stdout'] = Module['stderr'] = function (code) {
+	console.log('stdout or err called', code);
 	Module['return'] += String.fromCharCode(code);
 };

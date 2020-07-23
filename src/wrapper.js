@@ -2,10 +2,6 @@ function toArray(val) {
 	return Array.isArray(val) ? val : [val];
 }
 
-function fileNotFound(path) {
-	throw new Error(`File ${path} not found`)
-}
-
 function validateXML(options) {
 	return new Promise((_wrapperPrivateResolve, _wrapperPrivateReject) => {
 		var Module = {
@@ -18,8 +14,10 @@ function validateXML(options) {
 		} else {
 			Module['extension'] = '--schema';
 		}
+		var _wrapperPrivateExited = false;
 
 		function _wrapperPrivateReturn() {
+			_wrapperPrivateExited = true;
 			_wrapperPrivateResolve({
 				errors: Module['return'].length
 				? Module['return'].split('\n').slice(0, -2)
@@ -27,31 +25,7 @@ function validateXML(options) {
 			})
 		}
 
-		// Mock FS instead of passing directly to Node's file system.
-		// https://emscripten.org/docs/api_reference/Filesystem-API.html
-		var FS = {
-			readFile(path, opts) {
-				console.log('Reading file');
-				// Parse filename based on the name pattern that is used in pre.js
-				const filenameParts = path.match(/^file_([0-9]+)\.(xsd|xml)$/);
-				if (!filenameParts) {
-					fileNotFound(path);
-				}
-				const index = parseInt(filenameParts[1])
-				let file
-				if (filenameParts[2] === 'xsd') {
-					file = Module.schema[index];
-				} else {
-					file = Module.xml[index];
-				}
-				if (opts.encoding === 'utf8') {
-					return new TextEncoder().encode(file).buffer;
-				}
-			}
-		};
-
 		var _wrapperPrivateErrorHandlers = [];
-		var _wrapperPrivateExited = false;
 
 		var process = {
 			argv: [],
@@ -81,6 +55,11 @@ function validateXML(options) {
 				handler(err);
 			}
 		}
+		setTimeout(() => {
+			if (!_wrapperPrivateExited) {
+				_wrapperPrivateReturn();
+			}
+		});
 	});
 }
 
