@@ -1,7 +1,8 @@
+if(typeof FS === 'undefined')/** @suppress{checkTypes}*/FS={"__EMSCRIPTEN_PRIVATE_MODULE_EXPORT_NAME_SUBSTITUTION__":1};
 
 Module['preRun'] = function () {
-	var i
-	;
+	var i;
+	Module['intArrayFromString'] = intArrayFromString;
 	//Clamping this to `1` xml file for the moment since it's unclear how best to format the return value to support multiple xml files.
 	for (i = 0; i < (1 || Module['xml'].length); i++) {
 		FS.createDataFile('/', 'file_' + i + '.xml', Module['intArrayFromString'](Module['xml'][i]), true, true);
@@ -14,8 +15,7 @@ Module['preRun'] = function () {
 Module.arguments = ['--noout'];
 
 (function () {
-	var i
-	;
+	var i;
 	if ('[object Array]' !== Object.prototype.toString.call(Module['schema'])) {
 		Module['schema'] = [Module['schema']];
 	}

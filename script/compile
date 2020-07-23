@@ -1,8 +1,8 @@
 #!/bin/bash
 
 emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
-	-s MODULARIZE=1 \
-	--closure 1 \
+	-s ENVIRONMENT=node \
+	--closure 0 \
 	--memory-init-file 0 \
 	./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
 	-o xmllint.raw.js --pre-js ./src/pre.js
