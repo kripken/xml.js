@@ -7,7 +7,7 @@ function fileNotFound(path) {
 }
 
 function validateXML(options) {
-	return new Promise((resolve, reject) => {
+	return new Promise((_wrapperPrivateResolve, _wrapperPrivateReject) => {
 		var Module = {
 			xml: toArray(options.xml),
 			schema: toArray(options.schema),
@@ -19,8 +19,8 @@ function validateXML(options) {
 			Module['extension'] = '--schema';
 		}
 
-		function $return() {
-			resolve({
+		function _wrapperPrivateReturn() {
+			_wrapperPrivateResolve({
 				errors: Module['return'].length
 				? Module['return'].split('\n').slice(0, -2)
 				: null
@@ -50,26 +50,26 @@ function validateXML(options) {
 			}
 		};
 
-		var errorHandlers = [];
-		var exited = false;
+		var _wrapperPrivateErrorHandlers = [];
+		var _wrapperPrivateExited = false;
 
 		var process = {
 			argv: [],
 			exit(code) {
-				console.log('exiting', code, exited);
-				if (exited) return
-				exited = true;
-				if (code === 4 /* Validation error */) {
-					resolve(makeResult(num));
+				console.log('exiting', code, _wrapperPrivateExited, Module['return']);
+				if (_wrapperPrivateExited) return
+				_wrapperPrivateExited = true;
+				if (code === 3 || code === 4 /* Validation error */) {
+					return _wrapperPrivateReturn()
 				} else {
 					const err = new Error(Module['return']);
 					err.code = code;
-					reject(err);
+					_wrapperPrivateReject(err);
 				}
 			},
 			on(eventType, cb) {
 				if (eventType === 'uncaughtException' || eventType === 'unhandledRejection') {
-					errorHandlers.push(cb);
+					_wrapperPrivateErrorHandlers.push(cb);
 				}
 			}
 		};
@@ -77,12 +77,10 @@ function validateXML(options) {
 		try {
 		/* XMLLINT.RAW.JS */
 		} catch(err) {
-			for (const handler of errorHandlers) {
+			for (const handler of _wrapperPrivateErrorHandlers) {
 				handler(err);
 			}
 		}
-
-		return makeResult(0);
 	});
 }
 
