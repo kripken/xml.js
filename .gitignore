@@ -4,4 +4,4 @@ bundle.js
 
 # Build output
 xmllint.js
-xmllint.raw.wasm
+xmllint.wasm
