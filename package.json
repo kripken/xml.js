@@ -29,5 +29,8 @@
     "worker.js",
     "xmllint.js",
     "xmllint.wasm"
-  ]
+  ],
+  "devDependencies": {
+    "eslint": "^7.5.0"
+  }
 }
