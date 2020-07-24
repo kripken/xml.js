@@ -28,7 +28,9 @@
     "index.js",
     "worker.js",
     "xmllint.js",
-    "xmllint.wasm"
+    "xmllint.wasm",
+    "index.d.ts",
+    "index.js.flow"
   ],
   "devDependencies": {
     "eslint": "^7.5.0"
