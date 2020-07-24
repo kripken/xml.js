@@ -1,10 +1,10 @@
 #!/bin/bash
 
-emcc -O0 -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
+emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
 	-s ENVIRONMENT=node,worker \
 	-s MODULARIZE=true \
 	-s EXPORT_NAME=Module \
-	--closure 0 \
+	--closure 1 \
 	--memory-init-file 0 \
 	./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
 	-o xmllint.js --pre-js ./src/pre.js
