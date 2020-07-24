@@ -1,0 +1,12 @@
+{
+  "extends": "../.eslintrc.json",
+  "env": {
+    "es2020": false,
+    "es6": false
+  },
+  "globals": {
+      "Module": false,
+      "FS": false,
+      "intArrayFromString": false
+  }
+}

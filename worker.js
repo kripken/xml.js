@@ -7,6 +7,6 @@ function stdout(msg) {
 require('./xmllint.js')({
 	xml: workerData.xml,
 	schema: workerData.schema,
-	extension: '--schema',
+	extension: `--${workerData.extension}`,
 	stdout, stderr: stdout,
 });

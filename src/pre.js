@@ -1,29 +1,27 @@
 Module['preRun'] = function () {
-	var i;
-	//Clamping this to `1` xml file for the moment since it's unclear how best to format the return value to support multiple xml files.
-	for (i = 0; i < (1 || Module['xml'].length); i++) {
-		FS.createDataFile('/', 'file_' + i + '.xml', intArrayFromString(Module['xml'][i]), true, true);
-	}
-	for (i = 0; i < Module['schema'].length; i++) {
-		FS.createDataFile('/', 'file_' + i + '.xsd', intArrayFromString(Module['schema'][i]), true, true);
-	}
+	/** @type {Object[]} */
+	var schemas = Module['schema'];
+	/** @type {Object[]} */
+	var xmlFiles = Module['xml'];
+	xmlFiles.concat(schemas).forEach(function(xmlInfo) {
+		FS.createDataFile('/', xmlInfo['fileName'], intArrayFromString(xmlInfo['xml']), true, true);
+	});
 };
 
+// Don't print back the xml file in output.
 Module['arguments'] = ['--noout'];
 
 (function() {
-	var i;
-	if (!Array.isArray(Module['schema'])) {
-		Module['schema'] = [Module['schema']];
-	}
-	if (!Array.isArray(Module['xml'])) {
-		Module['xml'] = [Module['xml']];
-	}
-	for (i = 0; i < Module['schema'].length; i++) {
-		Module.arguments.push(Module['extension']);
-		Module.arguments.push('file_' + i + '.xsd');
-	}
-	for (i = 0; i < (1 || Module['xml'].length); i++) {
-		Module.arguments.push('file_' + i + '.xml');
-	}
+	var ext = Module['extension']; // --schema or --relaxng
+	/** @type {Object[]} */
+	var schemas = Module['schema'];
+	/** @type {Object[]} */
+	var xmlFiles = Module['xml'];
+	schemas.forEach(function(schemaInfo) {
+		Module.arguments.push(ext);
+		Module.arguments.push(schemaInfo['fileName']);
+	});
+	xmlFiles.forEach(function(xmlInfo) {
+		Module.arguments.push(xmlInfo['fileName']);
+	});
 })();

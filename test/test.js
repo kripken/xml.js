@@ -5,30 +5,92 @@ const xmlValid = fs.readFileSync('./test/test-valid.xml', 'utf8');
 const xmlInvalid = fs.readFileSync('./test/test-invalid.xml', 'utf8');
 const schema = fs.readFileSync('./test/test.xsd', 'utf8');
 
-async function test() {
-	const validationSuccess = await xmllint.validateXML({
-		xml: xmlValid, schema,
+async function testWithValidFile() {
+	const {rawOutput, ...result} = await xmllint.validateXML({
+		xml: {fileName: 'valid.xml', xml: xmlValid}, schema,
 	});
-	console.log(validationSuccess);
-	assert.deepEqual(validationSuccess, {errors: []}, 'No errors for valid XML');
 
-	const validationErrors = await xmllint.validateXML({
+	assert.equal(rawOutput.trim(), 'valid.xml validates');
+	assert.deepEqual(result, {valid: true, errors: []});
+}
+
+async function testWithInvalidFile() {
+	const {rawOutput, ...result} = await xmllint.validateXML({
 		xml: xmlInvalid, schema,
 	});
-	const expectedErrors = {
+	const expectedErrorResult = {
+		valid: false,
 		errors: [
-			"file_0.xml:21: element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
-			"file_0.xml:25: element item: Schemas validity error : Element 'item', attribute 'partNum': [facet 'pattern'] The value '92-AA' is not accepted by the pattern '\\d{3}-[A-Z]{2}'."
-		]
+			{
+				rawMessage: "file_0.xml:21: element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
+				message: "element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
+				loc: { fileName: 'file_0.xml', lineNumber: 21 }
+			},
+			{
+				rawMessage: "file_0.xml:25: element item: Schemas validity error : Element 'item', attribute 'partNum': [facet 'pattern'] The value '92-AA' is not accepted by the pattern '\\d{3}-[A-Z]{2}'.",
+				message: "element item: Schemas validity error : Element 'item', attribute 'partNum': [facet 'pattern'] The value '92-AA' is not accepted by the pattern '\\d{3}-[A-Z]{2}'.",
+				loc: { fileName: 'file_0.xml', lineNumber: 25 }
+			}
+		]		
 	};
 
-	console.log(validationErrors);
-	assert.deepEqual(validationErrors, expectedErrors, 'Two errors for the invalid XML');	
+	assert.deepEqual(result, expectedErrorResult);
+}
 
+async function testWithTwoFiles() {
+	const input = [
+		{
+			fileName: 'valid.xml',
+			xml: xmlValid,
+		},
+		{
+			fileName: 'invalid.xml',
+			xml: xmlInvalid,
+		},
+	];
+	const {rawOutput, ...result} = await xmllint.validateXML({
+		xml: input,
+		schema,
+	});
+	const expectedResultForBoth = {
+		'valid': false,
+		'errors': [
+			{
+				rawMessage: "invalid.xml:21: element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
+				message: "element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
+				loc: {
+					fileName: 'invalid.xml',
+					lineNumber: 21
+				}
+			},
+			{
+				rawMessage: "invalid.xml:25: element item: Schemas validity error : Element 'item', attribute 'partNum': [facet 'pattern'] The value '92-AA' is not accepted by the pattern '\\d{3}-[A-Z]{2}'.",
+				message: "element item: Schemas validity error : Element 'item', attribute 'partNum': [facet 'pattern'] The value '92-AA' is not accepted by the pattern '\\d{3}-[A-Z]{2}'.",
+				loc: {
+					fileName: 'invalid.xml',
+					lineNumber: 25
+				}
+			}
+		]
+	};
+	
+	assert.deepEqual(result, expectedResultForBoth);
+}
+
+async function runTests(...tests) {
+	for (const test of tests) {
+		try {
+			await test();
+		} catch(err) {
+			console.error(`Test ${test.name} failed. ${err.message}`);
+			return process.exit(1);
+		}
+	}
 	console.log('All tests passed.');
 }
 
-test().catch(err => {
-	console.error(err);
-	process.exit(1);
-});
+runTests(
+	testWithValidFile,
+	testWithInvalidFile,
+	testWithTwoFiles,
+);

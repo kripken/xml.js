@@ -25,11 +25,9 @@
         "semi": [
             "error",
             "always"
-        ]
-    },
-    "globals": {
-        "Module": false,
-        "FS": false,
-        "intArrayFromString": false
+        ],
+        "no-unused-vars": ["error", {
+            "ignoreRestSiblings": true
+        }]
     }
 }
