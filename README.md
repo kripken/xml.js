@@ -1,3 +1,5 @@
+# xmllint-wasm
+
 libxml2's xmllint tool compiled to WebAssembly using Emscripten, to be used
 in Node.js applications in environments where you can't or don't want to
 depend on the native library.
