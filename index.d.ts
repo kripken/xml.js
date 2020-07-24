@@ -37,7 +37,7 @@ export type XMLValidationError = {
 };
 
 export type XMLValidationResult = {
-  readonly valid: true;
+  readonly valid: boolean;
   readonly errors: ReadonlyArray<XMLValidationError>;
   readonly rawOutput: string;
 }

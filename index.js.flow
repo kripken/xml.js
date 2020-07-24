@@ -1,0 +1,47 @@
+// @flow
+
+export type XMLString = string;
+
+export type XMLFileInfo = {|
+  +fileName: string;
+  +xml: XMLString;
+|};
+
+export type XMLInput = XMLString | XMLFileInfo;
+
+export type XMLLintOptions = {|
+  /**
+   * XML file contents to validate.
+   * Note that xmllint only supports UTF-8 encoded files.
+  */
+  +xml: XMLInput | $ReadOnlyArray<XMLInput>;
+  +schema: XMLInput | $ReadOnlyArray<XMLInput>;
+  /**
+   * @default 'schema'
+  */
+  +extension?: 'schema' | 'relaxng',
+|};
+
+export type XMLValidationError = {|
+  +rawMessage: string;
+  /**
+   * Error message without the file name and line number.
+   */
+  +message: string;
+  /**
+   * Position of the error.
+   * null if we failed to parse the position from the raw message for some reason.
+   */
+  +loc: null | {|
+    +fileName: string;
+    +lineNumber: number;
+  |};
+|};
+
+export type XMLValidationResult = {|
+  +valid: boolean;
+  +errors: $ReadOnlyArray<XMLValidationError>;
+  +rawOutput: string;
+|}
+
+declare export function validateXML(options: XMLLintOptions): Promise<XMLValidationResult>;
