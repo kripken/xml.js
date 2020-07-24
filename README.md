@@ -23,10 +23,10 @@ instead.
 * The output is wasm instead of asm.js
 * Target environment is Node 10.5 or newer instead of the browser
 * Library size is quite a bit smaller, the wasm file and wrapper js files
-	weigh about 860K combined
+  weigh about 860K combined
 * There are some changes to the API, which is described in more detail
-	below. Overall this project behaves more like a library that you'd call from
-	a JS application, instead of like a command-line tool that xmllint normally is.
+  below. Overall this project behaves more like a library that you'd call from
+  a JS application, instead of like a command-line tool that xmllint normally is.
 
 ## Installation
 ```sh
@@ -46,24 +46,24 @@ Type definitions at [index.d.ts](index.d.ts).
 const {validateXML} = require('xmllint-wasm');
 
 async function example() {
-	const [myXMLFile, mySchemaFile] = await Promise.all([
-		fs.promises.readFile('./my-xml-file.xml', 'utf8'),
-		fs.promises.readFile('./my-schema-file.xml', 'utf8'),
-	])
+  const [myXMLFile, mySchemaFile] = await Promise.all([
+    fs.promises.readFile('./my-xml-file.xml', 'utf8'),
+    fs.promises.readFile('./my-schema-file.xml', 'utf8'),
+  ])
 
-	const validationResult = await validateXML({
-		xml: [{
-			fileName: 'my-xml-file.xml',
-			xml: myXmlFile,
-		}],
-		schema: mySchemaFile,
-	});
-	
-	if (validationResult.valid) {
-		console.log('There were no errors!')
-	} else {
-		console.warn(validationResult.errors);
-	}
+  const validationResult = await validateXML({
+    xml: [{
+      fileName: 'my-xml-file.xml',
+      xml: myXmlFile,
+    }],
+    schema: mySchemaFile,
+  });
+  
+  if (validationResult.valid) {
+    console.log('There were no errors!')
+  } else {
+    console.warn(validationResult.errors);
+  }
 }
 
 ```
@@ -82,20 +82,20 @@ The Promise resolved with a object like the following
 ```javascript
 
 {
-	valid: false,
-	errors: [
-		{
-			// Raw output from running xmllint for
-			// this particular error/line of the output
-			rawMessage: "my-xml-file.xml:21: element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
-			// Error message without the location info
-			message: "element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
-			// Error location info, if we managed to parse that from the output (null otherwise)
-			loc: { fileName: 'my-xml-file.xml', lineNumber: 21 }
-		}
-	],
-	// Raw output string from running xmllint
-	rawOutput: "my-xml-file.xml:21: element quantity: Schemas validity error ...",
+  valid: false,
+  errors: [
+    {
+      // Raw output from running xmllint for
+      // this particular error/line of the output
+      rawMessage: "my-xml-file.xml:21: element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
+      // Error message without the location info
+      message: "element quantity: Schemas validity error : Element 'quantity': [facet 'maxExclusive'] The value '1000' must be less than '100'.",
+      // Error location info, if we managed to parse that from the output (null otherwise)
+      loc: { fileName: 'my-xml-file.xml', lineNumber: 21 }
+    }
+  ],
+  // Raw output string from running xmllint
+  rawOutput: "my-xml-file.xml:21: element quantity: Schemas validity error ...",
 }
 ```
 
@@ -108,9 +108,9 @@ Install emscripten and source their shell env.
 Finally, run the commands for Emscripten build
 
 ```sh
-	./script/clean
-	./script/libxml2
-	./script/compile
-	./script/test
+  ./script/clean
+  ./script/libxml2
+  ./script/compile
+  ./script/test
 ```
 There might also be some other build dependencies not listed here, I'm afraid.
