@@ -1,5 +1,5 @@
 const fs = require('fs');
-const xml = fs.readFileSync('./test/test.xml', 'utf8');
+let xml = fs.readFileSync('./test/test.xml', 'utf8');
 const schema = fs.readFileSync('./test/test.xsd', 'utf8');
 
 const api = require('./index');
@@ -12,4 +12,7 @@ async function test() {
     console.log('fail');
   }
 }
-test();
+test().then(() => {
+  xml = xml.replace('quantity>1', 'quantity>-1');
+  test();
+});
