@@ -1,35 +1,33 @@
 {
-  "name": "xmllint",
+  "name": "xmllint-wasm",
   "version": "0.1.1",
-  "description": "Online demo at http://syssgx.github.com/xml.js/",
-  "main": "xmllint.js",
+  "description": "Fork of https://www.npmjs.com/package/xmllint with some updates",
+  "main": "index.js",
   "directories": {
     "test": "test"
   },
   "dependencies": {},
-  "devDependencies": {
-    "gulp": "~3.8.10",
-    "brfs": "~1.3.0",
-    "browserify": "~8.1.3",
-    "browserify-shim": "~3.8.2"
-  },
-  "browserify-shim": {
-    "xmllint": "global:xmllint"
-  },
   "scripts": {
     "test": "./script/test"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kripken/xml.js"
+    "url": "https://github.com/noppa/xml.js"
   },
-  "author": "kripken",
+  "author": "noppa",
   "contributors": [
     "kripken",
-    "sterpe"
+    "sterpe",
+    "noppa"
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/kripken/xml.js/issues"
-  }
+    "url": "https://github.com/noppa/xml.js/issues"
+  },
+  "files": [
+    "index.js",
+    "worker.js",
+    "xmllint.js",
+    "xmllint.wasm"
+  ]
 }
