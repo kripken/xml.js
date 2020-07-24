@@ -1,8 +1,9 @@
 const { Worker } = require('worker_threads');
+const workerFile = require.resolve('./worker.js');
 
 function validateXML(options) {
   return new Promise(function validateXMLPromiseCb(resolve, reject) {
-    const worker = new Worker('./worker.js', {
+    const worker = new Worker(workerFile, {
       workerData: options,
     });
 
