@@ -17,8 +17,7 @@ function validateXML(options) {
         resolve({
           errors: [],
         })
-      }
-      if (code === 3 || code === 4 /* validationError */) {
+      } else if (code === 3 || code === 4 /* validationError */) {
         resolve({
           errors: output.length
             ? output.split('\n').slice(0, -2)
