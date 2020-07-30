@@ -7,7 +7,7 @@ function validateXML(options) {
 			workerData: {
 				xml: normalizeInput(options.xml, 'xml'),
 				schema: normalizeInput(options.schema, 'xsd'),
-				preload: normalizeInput(options.preload, 'xml'),
+				preload: normalizeInput(options.preload || [], 'xml'),
 				extension: options.extension || 'schema',
 			},
 		});

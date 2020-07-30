@@ -7,7 +7,7 @@ const schema = fs.readFileSync('./test/test.xsd', 'utf8');
 
 async function testWithValidFile() {
 	const {rawOutput, ...result} = await xmllint.validateXML({
-		xml: {fileName: 'valid.xml', xml: xmlValid}, schema,
+		xml: {fileName: 'valid.xml', contents: xmlValid}, schema,
 	});
 
 	assert.equal(rawOutput.trim(), 'valid.xml validates');
@@ -41,11 +41,11 @@ async function testWithTwoFiles() {
 	const input = [
 		{
 			fileName: 'valid.xml',
-			xml: xmlValid,
+			contents: xmlValid,
 		},
 		{
 			fileName: 'invalid.xml',
-			xml: xmlInvalid,
+			contents: xmlInvalid,
 		},
 	];
 	const {rawOutput, ...result} = await xmllint.validateXML({

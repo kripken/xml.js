@@ -19,7 +19,7 @@ export type XMLLintOptions = {
    * file system so that xmllint can access them.
    * Useful if your schema contains imports.
    */
-  readonly preload: XMLFileInfo | ReadonlyArray<XMLFileInfo>;
+  readonly preload?: null | undefined | XMLFileInfo | ReadonlyArray<XMLFileInfo>;
   /**
    * @default 'schema'
   */
