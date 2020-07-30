@@ -4,7 +4,7 @@ export type XMLString = string;
 
 export type XMLFileInfo = {|
   +fileName: string;
-  +xml: XMLString;
+  +contents: XMLString;
 |};
 
 export type XMLInput = XMLString | XMLFileInfo;
@@ -16,6 +16,12 @@ export type XMLLintOptions = {|
   */
   +xml: XMLInput | $ReadOnlyArray<XMLInput>;
   +schema: XMLInput | $ReadOnlyArray<XMLInput>;
+  /**
+   * Other files that should be added to Emscripten's in-memory
+   * file system so that xmllint can access them.
+   * Useful if your schema contains imports.
+   */
+  +preload: XMLFileInfo | $ReadOnlyArray<XMLFileInfo>;
   /**
    * @default 'schema'
   */

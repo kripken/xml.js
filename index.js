@@ -7,6 +7,7 @@ function validateXML(options) {
 			workerData: {
 				xml: normalizeInput(options.xml, 'xml'),
 				schema: normalizeInput(options.schema, 'xsd'),
+				preload: normalizeInput(options.preload, 'xml'),
 				extension: options.extension || 'schema',
 			},
 		});
@@ -85,7 +86,7 @@ function normalizeInput(fileInput, extension) {
 		if (typeof xmlInfo === 'string') {
 			return {
 				fileName: `file_${i}.${extension}`,
-				xml: xmlInfo,
+				contents: xmlInfo,
 			};
 		} else {
 			return xmlInfo;

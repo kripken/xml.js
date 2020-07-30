@@ -54,7 +54,7 @@ async function example() {
   const validationResult = await validateXML({
     xml: [{
       fileName: 'my-xml-file.xml',
-      xml: myXmlFile,
+      contents: myXmlFile,
     }],
     schema: mySchemaFile,
   });

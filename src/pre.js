@@ -1,10 +1,12 @@
 Module['preRun'] = function () {
 	/** @type {Object[]} */
-	var schemas = Module['schema'];
+	var schemas = Module['opt_schema'];
 	/** @type {Object[]} */
-	var xmlFiles = Module['xml'];
-	xmlFiles.concat(schemas).forEach(function(xmlInfo) {
-		FS.createDataFile('/', xmlInfo['fileName'], intArrayFromString(xmlInfo['xml']), true, true);
+	var xmlFiles = Module['opt_xml'];
+	/** @type {Object[]} */
+	var preload = Module['opt_preload'];
+	xmlFiles.concat(schemas, preload).forEach(function(xmlInfo) {
+		FS.createDataFile('/', xmlInfo['fileName'], intArrayFromString(xmlInfo['contents']), true, true);
 	});
 };
 
@@ -12,11 +14,11 @@ Module['preRun'] = function () {
 Module['arguments'] = ['--noout'];
 
 (function() {
-	var ext = Module['extension']; // --schema or --relaxng
+	var ext = Module['opt_extension']; // --schema or --relaxng
 	/** @type {Object[]} */
-	var schemas = Module['schema'];
+	var schemas = Module['opt_schema'];
 	/** @type {Object[]} */
-	var xmlFiles = Module['xml'];
+	var xmlFiles = Module['opt_xml'];
 	schemas.forEach(function(schemaInfo) {
 		Module.arguments.push(ext);
 		Module.arguments.push(schemaInfo['fileName']);
