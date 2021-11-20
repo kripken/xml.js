@@ -13,7 +13,7 @@ interface options {
 }
 
 interface result {
-    errors: null | string[]
+    errors?: string[]
 }
 
 export var validateXML : (Options: options) => result;
