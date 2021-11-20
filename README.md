@@ -27,7 +27,7 @@ in the case of no errors, or an Array of error strings....eg:
 
 ```javascript
 
-if (!xmllint.validateXML(opts).errors) {
+if (!result.errors) {
 	//there were no errors.
 }
 
