@@ -7,19 +7,18 @@ argument used will be ```--relaxng``` instead of ```--schema```. Otherwise
 
 -----------------------------------------------------------------------------------
 
-Online demo at http://syssgx.github.com/xml.js/
-
 This package exports the `xmllint` object which is an Emscripten port of
 libxml2's `xmllint` command for use in the browser or node.
 
 ##### API #####
 
 ```javascript
+const xmllint = require('xmllint');
 
-Object xmllint.validateXML({
-	xml: "String",
-	schema: "String" || ["String", "String", ...]
-});
+var result = xmllint.validateXML({
+    schema: "string",
+    xml: "string"
+})
 
 ```
 
