@@ -1,3 +1,5 @@
+THis package is a fork of [kripken/xml.js](https://github.com/kripken/xml.js) that is compatible with nodejs
+
 This branch adds an optional field to the options given to the validateXML function.
 If the user adds a field ```format``` with the content ```rng```, then the
 argument used will be ```--relaxng``` instead of ```--schema```. Otherwise
