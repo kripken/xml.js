@@ -3,65 +3,48 @@ const assert = require('assert');
 const { Worker } = require('worker_threads');
 const workerModule = require.resolve('./xmllint_worker.js');
 
-function validateXML(options) {
-	return new Promise(function validateXMLPromiseCb(resolve, reject) {
-
-		const xmls = normalizeInput(options.xml, 'xml');
-		const extension = options.extension || 'schema';
-		assert(['schema', 'relaxng'].includes(extension));
-		const schemas = normalizeInput(options.schema, 'xsd');
-		const more_preloads = normalizeInput(options.preload || [], 'xml');
-
-		const preloads = xmls.concat(schemas, more_preloads);
-		const args = ['--noout']; // Don't print back the xml file in output;
-		schemas.forEach(function(schema) {
-			args.push(`--${extension}`);
-			args.push(schema['fileName']);
-		});
-		xmls.forEach(function(xml) {
-			args.push(xml['fileName']);
-		});
-
-		const worker = new Worker(workerModule, {
-			workerData: {
-				preloads: preloads,
-				args: args
-			}
-		});
-
-		let output = '';
-
-		function stdout(msg) {
-			output += String.fromCharCode(msg);
+function normalizeInput(fileInput, extension) {
+	if (!Array.isArray(fileInput)) fileInput = [fileInput];
+	return fileInput.map((xmlInfo, i) => {
+		if (typeof xmlInfo === 'string') {
+			return {
+				fileName: `file_${i}.${extension}`,
+				contents: xmlInfo,
+			};
+		} else {
+			return xmlInfo;
 		}
-
-		function onExit(code) {
-			if (code === 0) {
-				resolve({
-					valid: true,
-					errors: [],
-					rawOutput: output,
-				});
-			} else if (code === 3 || code === 4 /* validationError */) {
-				resolve({
-					valid: false,
-					errors: parseErrors(output),
-					rawOutput: output,
-				});
-			} else {
-				const err = new Error(output);
-				err.code = code;
-				reject(err);
-			}
-		}
-
-		worker.on('message', stdout);
-		worker.on('exit', onExit);
-		worker.on('error', err => {
-			console.error('Unexpected error event from worker: ' + err);
-			reject(err);
-		});
 	});
+}
+
+function preprocessOptions(options) {
+	const xmls = normalizeInput(options.xml, 'xml');
+	const extension = options.extension || 'schema';
+	assert(['schema', 'relaxng'].includes(extension));
+	const schemas = normalizeInput(options.schema, 'xsd');
+	const more_preloads = normalizeInput(options.preload || [], 'xml');
+
+	const preloads = xmls.concat(schemas, more_preloads);
+	const args = ['--noout']; // Don't print back the xml file in output;
+	schemas.forEach(function(schema) {
+		args.push(`--${extension}`);
+		args.push(schema['fileName']);
+	});
+	xmls.forEach(function(xml) {
+		args.push(xml['fileName']);
+	});
+
+	return { preloads, args };
+}
+
+function validationSucceeded(exitCode) {
+	if (exitCode === 0) {
+		return true;
+	} else if (exitCode === 3 || exitCode === 4 /* validationError */) {
+		return false;
+	} else /* unknown situation */ {
+		return null;
+	}
 }
 
 function parseErrors(/** @type {string} */output) {
@@ -97,17 +80,43 @@ function parseErrors(/** @type {string} */output) {
 	});
 }
 
-function normalizeInput(fileInput, extension) {
-	if (!Array.isArray(fileInput)) fileInput = [fileInput];
-	return fileInput.map((xmlInfo, i) => {
-		if (typeof xmlInfo === 'string') {
-			return {
-				fileName: `file_${i}.${extension}`,
-				contents: xmlInfo,
-			};
-		} else {
-			return xmlInfo;
+function validateXML(options) {
+
+	preprocessedOptions = preprocessOptions(options);
+
+	return new Promise(function validateXMLPromiseCb(resolve, reject) {
+
+		const worker = new Worker(workerModule, {
+			workerData: preprocessedOptions
+		});
+
+		let output = '';
+
+		function stdout(msg) {
+			output += String.fromCharCode(msg);
 		}
+
+		function onExit(exitCode) {
+			const valid = validationSucceeded(exitCode);
+			if (valid === null) {
+				const err = new Error(output);
+				err.code = exitCode;
+				reject(err);
+			} else {
+				resolve({
+					valid: valid,
+					errors: valid ? [] : parseErrors(output),
+					rawOutput: output,
+				});
+			}
+		}
+
+		worker.on('message', stdout);
+		worker.on('exit', onExit);
+		worker.on('error', err => {
+			console.error('Unexpected error event from worker: ' + err);
+			reject(err);
+		});
 	});
 }
 
