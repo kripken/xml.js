@@ -23,8 +23,8 @@ function preprocessOptions(options) {
 	assert(['schema', 'relaxng'].includes(extension));
 	const schemas = normalizeInput(options.schema, 'xsd');
 	const preloads = normalizeInput(options.preload || [], 'xml');
-	const outputFormat = options.outputFormat || '';
-	assert(['', 'format', 'c14n'].includes(outputFormat));
+	const normalization = options.normalization || '';
+	assert(['', 'format', 'c14n'].includes(normalization));
 
 	const inputFiles = xmls.concat(schemas, preloads);
 	const args = [];
@@ -32,8 +32,8 @@ function preprocessOptions(options) {
 		args.push(`--${extension}`);
 		args.push(schema['fileName']);
 	});
-	if (outputFormat) {
-		args.push(`--${outputFormat}`);
+	if (normalization) {
+		args.push(`--${normalization}`);
 	};
 	xmls.forEach(function(xml) {
 		args.push(xml['fileName']);
