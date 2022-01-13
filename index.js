@@ -1,19 +1,31 @@
+
+const assert = require('assert');
 const { Worker } = require('worker_threads');
 const workerModule = require.resolve('./xmllint_worker.js');
 
 function validateXML(options) {
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
 
-		const xmllintOptions = {
-			xmls: normalizeInput(options.xml, 'xml'),
-			extension: options.extension || 'schema',
-			schemas: normalizeInput(options.schema, 'xsd'),
-			preloads: normalizeInput(options.preload || [], 'xml')
-		};
+		const xmls = normalizeInput(options.xml, 'xml');
+		const extension = options.extension || 'schema';
+		assert(['schema', 'relaxng'].includes(extension));
+		const schemas = normalizeInput(options.schema, 'xsd');
+		const more_preloads = normalizeInput(options.preload || [], 'xml');
+
+		const preloads = xmls.concat(schemas, more_preloads);
+		const args = ['--noout']; // Don't print back the xml file in output;
+		schemas.forEach(function(schema) {
+			args.push(`--${extension}`);
+			args.push(schema['fileName']);
+		});
+		xmls.forEach(function(xml) {
+			args.push(xml['fileName']);
+		});
 
 		const worker = new Worker(workerModule, {
 			workerData: {
-				xmllintOptions: xmllintOptions
+				preloads: preloads,
+				args: args
 			}
 		});
 

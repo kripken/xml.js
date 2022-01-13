@@ -6,5 +6,6 @@ function stdout(msg) {
 
 require('./xmllint.js')({
 	stdout, stderr: stdout,
-	xmllintOptions: workerData.xmllintOptions
+	preloads: workerData.preloads,
+	args: workerData.args
 });
