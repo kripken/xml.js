@@ -6,9 +6,9 @@ function validateXML(options) {
 
 		const xmllintOptions = {
 			xmls: normalizeInput(options.xml, 'xml'),
-			schemas: normalizeInput(options.schema, 'xsd'),
-			preloads: normalizeInput(options.preload || [], 'xml'),
 			extension: options.extension || 'schema',
+			schemas: normalizeInput(options.schema, 'xsd'),
+			preloads: normalizeInput(options.preload || [], 'xml')
 		};
 
 		const worker = new Worker(workerModule, {
