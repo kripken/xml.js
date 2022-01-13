@@ -1,5 +1,5 @@
 
-const assert = require('assert');
+const assert = require('assert').strict;
 const { Worker } = require('worker_threads');
 const workerModule = require.resolve('./xmllint_worker.js');
 
