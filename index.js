@@ -90,23 +90,35 @@ function validateXML(options) {
 			workerData: preprocessedOptions
 		});
 
-		let output = '';
+		let stdout = '';
+		let stderr = '';
 
-		function onMessage(msg) {
-			output += String.fromCharCode(msg);
+		function onMessage({isStdout, txt}) {
+			var s = String.fromCharCode(txt)
+			if (isStdout) {
+				stdout += s;
+			} else {
+				stderr += s;
+			}
 		}
 
 		function onExit(exitCode) {
 			const valid = validationSucceeded(exitCode);
 			if (valid === null) {
-				const err = new Error(output);
+				const err = new Error(stderr);
 				err.code = exitCode;
 				reject(err);
 			} else {
 				resolve({
 					valid: valid,
-					errors: valid ? [] : parseErrors(output),
-					rawOutput: output,
+					errors: valid ? [] : parseErrors(stderr),
+					rawOutput: stderr
+					/* Traditionally, stdout has been suppressed both
+					 * by libxml2 compile options as well as explict
+					 * --noout in arguments; hence »rawOutput« refers
+					 * only to stderr, which is a reasonable attribute value
+					 * despite the slightly odd attribute name.
+					 */
 				});
 			}
 		}
