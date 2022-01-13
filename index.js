@@ -1,15 +1,20 @@
 const { Worker } = require('worker_threads');
-const workerFile = require.resolve('./xmllint_worker.js');
+const workerModule = require.resolve('./xmllint_worker.js');
 
 function validateXML(options) {
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
-		const worker = new Worker(workerFile, {
+
+		const xmllintOptions = {
+			xml: normalizeInput(options.xml, 'xml'),
+			schema: normalizeInput(options.schema, 'xsd'),
+			preload: normalizeInput(options.preload || [], 'xml'),
+			extension: options.extension || 'schema',
+		};
+
+		const worker = new Worker(workerModule, {
 			workerData: {
-				xml: normalizeInput(options.xml, 'xml'),
-				schema: normalizeInput(options.schema, 'xsd'),
-				preload: normalizeInput(options.preload || [], 'xml'),
-				extension: options.extension || 'schema',
-			},
+				xmllintOptions: xmllintOptions
+			}
 		});
 
 		let output = '';
