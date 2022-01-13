@@ -92,7 +92,7 @@ function validateXML(options) {
 
 		let output = '';
 
-		function stdout(msg) {
+		function onMessage(msg) {
 			output += String.fromCharCode(msg);
 		}
 
@@ -111,12 +111,14 @@ function validateXML(options) {
 			}
 		}
 
-		worker.on('message', stdout);
-		worker.on('exit', onExit);
-		worker.on('error', err => {
+		function onError(err) {
 			console.error('Unexpected error event from worker: ' + err);
 			reject(err);
-		});
+		}
+
+		worker.on('message', onMessage);
+		worker.on('exit', onExit);
+		worker.on('error', onError);
 	});
 }
 
