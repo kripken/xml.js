@@ -11,6 +11,6 @@ function stderr(txt) {
 require('./xmllint.js')({
 	stdout: stdout,
 	stderr: stderr,
-	preloads: workerData.preloads,
+	inputFiles: workerData.inputFiles,
 	args: workerData.args
 });

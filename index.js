@@ -22,9 +22,9 @@ function preprocessOptions(options) {
 	const extension = options.extension || 'schema';
 	assert(['schema', 'relaxng'].includes(extension));
 	const schemas = normalizeInput(options.schema, 'xsd');
-	const more_preloads = normalizeInput(options.preload || [], 'xml');
+	const preloads = normalizeInput(options.preload || [], 'xml');
 
-	const preloads = xmls.concat(schemas, more_preloads);
+	const inputFiles = xmls.concat(schemas, preloads);
 	const args = ['--noout']; // Don't print back the xml file in output;
 	schemas.forEach(function(schema) {
 		args.push(`--${extension}`);
@@ -34,7 +34,7 @@ function preprocessOptions(options) {
 		args.push(xml['fileName']);
 	});
 
-	return { preloads, args };
+	return { inputFiles, args };
 }
 
 function validationSucceeded(exitCode) {
