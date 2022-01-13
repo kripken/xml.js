@@ -1,5 +1,5 @@
 const { Worker } = require('worker_threads');
-const workerFile = require.resolve('./worker.js');
+const workerFile = require.resolve('./xmllint_worker.js');
 
 function validateXML(options) {
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {

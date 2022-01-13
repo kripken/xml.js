@@ -26,7 +26,7 @@
   },
   "files": [
     "index.js",
-    "worker.js",
+    "xmllint_worker.js",
     "xmllint.js",
     "xmllint.wasm",
     "index.d.ts",
