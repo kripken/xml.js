@@ -25,7 +25,7 @@ function preprocessOptions(options) {
 	const preloads = normalizeInput(options.preload || [], 'xml');
 
 	const inputFiles = xmls.concat(schemas, preloads);
-	const args = ['--noout']; // Don't print back the xml file in output;
+	const args = [];
 	schemas.forEach(function(schema) {
 		args.push(`--${extension}`);
 		args.push(schema['fileName']);
@@ -111,6 +111,7 @@ function validateXML(options) {
 			} else {
 				resolve({
 					valid: valid,
+					normalized: stdout,
 					errors: valid ? [] : parseErrors(stderr),
 					rawOutput: stderr
 					/* Traditionally, stdout has been suppressed both

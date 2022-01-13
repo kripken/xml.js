@@ -2,20 +2,22 @@ const fs = require('fs');
 const assert = require('assert').strict;
 const xmllint = require('../index.js');
 const xmlValid = fs.readFileSync('./test/test-valid.xml', 'utf8');
+const xmlValidNormalized = fs.readFileSync('./test/test-valid-normalized.xml', 'utf8');
 const xmlInvalid = fs.readFileSync('./test/test-invalid.xml', 'utf8');
 const schema = fs.readFileSync('./test/test.xsd', 'utf8');
 
 async function testWithValidFile() {
-	const {rawOutput, ...result} = await xmllint.validateXML({
+	const {rawOutput, normalized, ...result} = await xmllint.validateXML({
 		xml: {fileName: 'valid.xml', contents: xmlValid}, schema,
 	});
 
-	assert.equal(rawOutput.trim(), 'valid.xml validates');
 	assert.deepEqual(result, {valid: true, errors: []});
+	assert.equal(normalized, xmlValidNormalized);
+	assert.equal(rawOutput.trim(), 'valid.xml validates');
 }
 
 async function testWithInvalidFile() {
-	const {rawOutput, ...result} = await xmllint.validateXML({
+	const {rawOutput, normalized, ...result} = await xmllint.validateXML({
 		xml: xmlInvalid, schema,
 	});
 	const expectedErrorResult = {
@@ -48,7 +50,7 @@ async function testWithTwoFiles() {
 			contents: xmlInvalid,
 		},
 	];
-	const {rawOutput, ...result} = await xmllint.validateXML({
+	const {rawOutput, normalized, ...result} = await xmllint.validateXML({
 		xml: input,
 		schema,
 	});
