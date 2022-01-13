@@ -1,10 +1,10 @@
 Module['preRun'] = function () {
 	/** @type {Object[]} */
-	var schemas = Module['opt_schema'];
+	var schemas = Module['opt_schemas'];
 	/** @type {Object[]} */
-	var xmlFiles = Module['opt_xml'];
+	var xmlFiles = Module['opt_xmls'];
 	/** @type {Object[]} */
-	var preload = Module['opt_preload'];
+	var preload = Module['opt_preloads'];
 	xmlFiles.concat(schemas, preload).forEach(function(xmlInfo) {
 		FS.createDataFile('/', xmlInfo['fileName'], intArrayFromString(xmlInfo['contents']), true, true);
 	});
@@ -16,9 +16,9 @@ Module['arguments'] = ['--noout'];
 (function() {
 	var ext = Module['opt_extension']; // --schema or --relaxng
 	/** @type {Object[]} */
-	var schemas = Module['opt_schema'];
+	var schemas = Module['opt_schemas'];
 	/** @type {Object[]} */
-	var xmlFiles = Module['opt_xml'];
+	var xmlFiles = Module['opt_xmls'];
 	schemas.forEach(function(schemaInfo) {
 		Module.arguments.push(ext);
 		Module.arguments.push(schemaInfo['fileName']);

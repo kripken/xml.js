@@ -5,9 +5,9 @@ function validateXML(options) {
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
 
 		const xmllintOptions = {
-			xml: normalizeInput(options.xml, 'xml'),
-			schema: normalizeInput(options.schema, 'xsd'),
-			preload: normalizeInput(options.preload || [], 'xml'),
+			xmls: normalizeInput(options.xml, 'xml'),
+			schemas: normalizeInput(options.schema, 'xsd'),
+			preloads: normalizeInput(options.preload || [], 'xml'),
 			extension: options.extension || 'schema',
 		};
 

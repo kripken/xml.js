@@ -6,8 +6,8 @@ function stdout(msg) {
 
 require('./xmllint.js')({
 	stdout, stderr: stdout,
-	opt_xml: workerData.xmllintOptions.xml,
-	opt_schema: workerData.xmllintOptions.schema,
-	opt_preload: workerData.xmllintOptions.preload,
+	opt_xmls: workerData.xmllintOptions.xmls,
+	opt_schemas: workerData.xmllintOptions.schemas,
+	opt_preloads: workerData.xmllintOptions.preloads,
 	opt_extension: `--${workerData.xmllintOptions.extension}`
 });
