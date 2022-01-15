@@ -49,7 +49,7 @@ function preprocessOptions(options) {
 function validationSucceeded(exitCode) {
 	if (exitCode === 0) {
 		return true;
-	} else if (exitCode === 3 || exitCode === 4 /* validationError */ ) {
+	} else if (exitCode === 3 || exitCode === 4 /* validationError */) {
 		return false;
 	} else /* unknown situation */ {
 		return null;
@@ -104,22 +104,14 @@ export function validateXML(options) {
 
 		let stdout = '';
 		let stderr = '';
+		let exitCode = -1;
 
-		function onMessage({isStdout, txt}) {
-			const s = String.fromCharCode(txt);
-			if (isStdout) {
-				stdout += s;
-			} else {
-				stderr += s;
-			}
-		}
-
-		function onExit(exitCode) {
-			const valid = validationSucceeded(exitCode);
-			if (valid === null) {
-				const err = new Error(stderr);
-				err.code = exitCode;
-				reject(err);
+		function onmessage(event) {
+			const data = event.data;
+			if (data.stdout) {
+				stdout += String.fromCharCode(data.stdout);
+			} else if (data.stderr) {
+				stderr += String.fromCharCode(data.stderr);
 			} else {
 				exitCode = data.exitCode;
 				const valid = validationSucceeded(exitCode);

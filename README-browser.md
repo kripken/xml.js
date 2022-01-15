@@ -15,4 +15,8 @@
 
 * `./browser/run_http_server &`
 
-* Open *http://localhost:8088/test_browser* in your browser.
+* Open *http://localhost:8088/* in your browser and run the example application.
+
+* Find example files to copy & paste in `./test`.
+
+* Find the sources of the example application in `./browser/html-data/`
