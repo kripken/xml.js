@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eu
+
+cd "$(dirname "$0")/html-data"
+
+python3 -m http.server --bind 127.0.0.1 8088

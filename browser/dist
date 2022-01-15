@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -eu
+
+cd "$(dirname "$0")"
+
+mkdir -p html-data/xmllint
+
+cp -va --target=html-data/xmllint ../xmllint.wasm ../xmllint_worker.js ../xmllint.js ../index.js
+

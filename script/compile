@@ -3,6 +3,7 @@
 emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
 	-s ENVIRONMENT=node,worker \
 	-s MODULARIZE=true \
+	-s NO_EXIT_RUNTIME=0 \
 	-s EXPORT_NAME=Module \
 	--closure 1 \
 	--memory-init-file 0 \
