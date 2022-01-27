@@ -26,6 +26,15 @@ export type XMLLintOptions = {|
    * @default 'schema'
   */
   +extension?: 'schema' | 'relaxng',
+  /**
+   * Pass either --format or --c14n to xmllint to get a formatted
+   * version of the input document to "normalized" property of the result.
+   * normalization: 'format' reformats and reindents the output.
+   * normalization: 'c14n' performs W3C XML Canonicalisation (C14N).
+   * Optional. If not specified, the "normalized" property of the output
+   * will be an empty string.
+   */
+  +normalization?: 'format' | 'c14n',
 |};
 
 export type XMLValidationError = {|
@@ -48,6 +57,11 @@ export type XMLValidationResult = {|
   +valid: boolean;
   +errors: $ReadOnlyArray<XMLValidationError>;
   +rawOutput: string;
+  /**
+   * If the "normalization" option was set in the options, this will contain
+   * the formatted output. Otherwise, it will be empty string.
+   */
+  +normalized: string;
 |}
 
 declare export function validateXML(options: XMLLintOptions): Promise<XMLValidationResult>;
