@@ -56,7 +56,9 @@ async function example() {
       fileName: 'my-xml-file.xml',
       contents: myXmlFile,
     }],
-    schema: mySchemaFile,
+    // All the schema files that are required to validate the documents.
+    // The main XSD should be first in the array, followed by its possible dependencies.
+    schema: [mySchemaFile],
   });
   
   if (validationResult.valid) {
