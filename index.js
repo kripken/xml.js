@@ -1,5 +1,4 @@
 
-const assert = require('assert').strict;
 const { Worker } = require('worker_threads');
 const workerModule = require.resolve('./xmllint_worker.js');
 
@@ -20,11 +19,11 @@ function normalizeInput(fileInput, extension) {
 function preprocessOptions(options) {
 	const xmls = normalizeInput(options.xml, 'xml');
 	const extension = options.extension || 'schema';
-	assert(['schema', 'relaxng'].includes(extension));
+	validateOption(['schema', 'relaxng'], 'extension', extension);
 	const schemas = normalizeInput(options.schema, 'xsd');
 	const preloads = normalizeInput(options.preload || [], 'xml');
 	const normalization = options.normalization || '';
-	assert(['', 'format', 'c14n'].includes(normalization));
+	validateOption(['', 'format', 'c14n'], 'normalization', normalization);
 
 	const inputFiles = xmls.concat(schemas, preloads);
 	const args = [];
@@ -49,6 +48,12 @@ function validationSucceeded(exitCode) {
 		return false;
 	} else /* unknown situation */ {
 		return null;
+	}
+}
+
+function validateOption(allowedValues, optionName, actualValue) {
+	if (!allowedValues.includes(actualValue)) {
+		throw new Error(`Invalid value for option ${optionName}: ${actualValue}`);
 	}
 }
 
