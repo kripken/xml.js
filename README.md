@@ -101,10 +101,9 @@ The Promise resolved with a object like the following
 
 ## Building xmllint from source
 
-Clone the project (including the submodule) and build
-the `libxml2` submodule. Build instructions for `libxml2`
-are in `libxml2/INSTALL` file.
-Install emscripten and source their shell env.  
+Clone the project (including the submodulem with git `--recursive`) and build.  
+[Install emscripten](https://emscripten.org/docs/getting_started/downloads.html#installation-instructions-using-the-emsdk-recommended)
+and source their shell env.  
 Finally, run the commands for Emscripten build
 
 ```sh
