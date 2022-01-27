@@ -8,6 +8,7 @@ cd ../build
 emconfigure ../libxml2/configure --disable-shared \
   --with-minimum --with-http=no --with-ftp=no \
   --with-python=no --with-threads=no \
+  --with-output --with-c14n \
   --with-schemas --with-schematron
 emmake make
 cd ..

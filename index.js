@@ -1,50 +1,55 @@
+
+const assert = require('assert').strict;
 const { Worker } = require('worker_threads');
-const workerFile = require.resolve('./worker.js');
+const workerModule = require.resolve('./xmllint_worker.js');
 
-function validateXML(options) {
-	return new Promise(function validateXMLPromiseCb(resolve, reject) {
-		const worker = new Worker(workerFile, {
-			workerData: {
-				xml: normalizeInput(options.xml, 'xml'),
-				schema: normalizeInput(options.schema, 'xsd'),
-				preload: normalizeInput(options.preload || [], 'xml'),
-				extension: options.extension || 'schema',
-			},
-		});
-
-		let output = '';
-
-		function stdout(msg) {
-			output += String.fromCharCode(msg);
+function normalizeInput(fileInput, extension) {
+	if (!Array.isArray(fileInput)) fileInput = [fileInput];
+	return fileInput.map((xmlInfo, i) => {
+		if (typeof xmlInfo === 'string') {
+			return {
+				fileName: `file_${i}.${extension}`,
+				contents: xmlInfo,
+			};
+		} else {
+			return xmlInfo;
 		}
-
-		function onExit(code) {
-			if (code === 0) {
-				resolve({
-					valid: true,
-					errors: [],
-					rawOutput: output,
-				});
-			} else if (code === 3 || code === 4 /* validationError */) {
-				resolve({
-					valid: false,
-					errors: parseErrors(output),
-					rawOutput: output,
-				});
-			} else {
-				const err = new Error(output);
-				err.code = code;
-				reject(err);
-			}
-		}
-
-		worker.on('message', stdout);
-		worker.on('exit', onExit);
-		worker.on('error', err => {
-			console.error('Unexpected error event from worker: ' + err);
-			reject(err);
-		});
 	});
+}
+
+function preprocessOptions(options) {
+	const xmls = normalizeInput(options.xml, 'xml');
+	const extension = options.extension || 'schema';
+	assert(['schema', 'relaxng'].includes(extension));
+	const schemas = normalizeInput(options.schema, 'xsd');
+	const preloads = normalizeInput(options.preload || [], 'xml');
+	const normalization = options.normalization || '';
+	assert(['', 'format', 'c14n'].includes(normalization));
+
+	const inputFiles = xmls.concat(schemas, preloads);
+	const args = [];
+	schemas.forEach(function(schema) {
+		args.push(`--${extension}`);
+		args.push(schema['fileName']);
+	});
+	if (normalization) {
+		args.push(`--${normalization}`);
+	};
+	xmls.forEach(function(xml) {
+		args.push(xml['fileName']);
+	});
+
+	return { inputFiles, args };
+}
+
+function validationSucceeded(exitCode) {
+	if (exitCode === 0) {
+		return true;
+	} else if (exitCode === 3 || exitCode === 4 /* validationError */) {
+		return false;
+	} else /* unknown situation */ {
+		return null;
+	}
 }
 
 function parseErrors(/** @type {string} */output) {
@@ -80,17 +85,58 @@ function parseErrors(/** @type {string} */output) {
 	});
 }
 
-function normalizeInput(fileInput, extension) {
-	if (!Array.isArray(fileInput)) fileInput = [fileInput];
-	return fileInput.map((xmlInfo, i) => {
-		if (typeof xmlInfo === 'string') {
-			return {
-				fileName: `file_${i}.${extension}`,
-				contents: xmlInfo,
-			};
-		} else {
-			return xmlInfo;
+function validateXML(options) {
+
+	preprocessedOptions = preprocessOptions(options);
+
+	return new Promise(function validateXMLPromiseCb(resolve, reject) {
+
+		const worker = new Worker(workerModule, {
+			workerData: preprocessedOptions
+		});
+
+		let stdout = '';
+		let stderr = '';
+
+		function onMessage({isStdout, txt}) {
+			var s = String.fromCharCode(txt)
+			if (isStdout) {
+				stdout += s;
+			} else {
+				stderr += s;
+			}
 		}
+
+		function onExit(exitCode) {
+			const valid = validationSucceeded(exitCode);
+			if (valid === null) {
+				const err = new Error(stderr);
+				err.code = exitCode;
+				reject(err);
+			} else {
+				resolve({
+					valid: valid,
+					normalized: stdout,
+					errors: valid ? [] : parseErrors(stderr),
+					rawOutput: stderr
+					/* Traditionally, stdout has been suppressed both
+					 * by libxml2 compile options as well as explict
+					 * --noout in arguments; hence »rawOutput« refers
+					 * only to stderr, which is a reasonable attribute value
+					 * despite the slightly odd attribute name.
+					 */
+				});
+			}
+		}
+
+		function onError(err) {
+			console.error('Unexpected error event from worker: ' + err);
+			reject(err);
+		}
+
+		worker.on('message', onMessage);
+		worker.on('exit', onExit);
+		worker.on('error', onError);
 	});
 }
 
