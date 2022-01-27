@@ -19,7 +19,7 @@ instead.
 
 ## Overview of changes made to the original project
 
-* libxml2 version is upgraded to v2.9.10
+* libxml2 version is upgraded to v2.9.12
 * The output is wasm instead of asm.js
 * Target environment is Node 10.5 or newer instead of the browser
 * Library size is quite a bit smaller, the wasm file and wrapper js files
@@ -71,6 +71,9 @@ Giving explicit fileNames is optional (you can just pass the file contents
 as string instead), but might help with mapping the correct error to a correct
 file if you are validating multiple files at once. 
 
+If you want the output to contain the (formatted) input XML, add
+`normalization: 'format'` or `normalization: 'c14n'` to the options.
+
 The return value is a Promise. Even though the xmllint command-line tool
 returns with a non-zero exit code if the xml fails to validate, we
 don't reject the Promise if there are validation errors as long as
@@ -96,6 +99,7 @@ The Promise resolved with a object like the following
   ],
   // Raw output string from running xmllint
   rawOutput: "my-xml-file.xml:21: element quantity: Schemas validity error ...",
+  normalized: ""
 }
 ```
 
