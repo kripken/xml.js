@@ -34,7 +34,7 @@ function preprocessOptions(options) {
 	});
 	if (normalization) {
 		args.push(`--${normalization}`);
-	};
+	}
 	xmls.forEach(function(xml) {
 		args.push(xml['fileName']);
 	});
@@ -86,8 +86,7 @@ function parseErrors(/** @type {string} */output) {
 }
 
 function validateXML(options) {
-
-	preprocessedOptions = preprocessOptions(options);
+	const preprocessedOptions = preprocessOptions(options);
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
 
@@ -99,7 +98,7 @@ function validateXML(options) {
 		let stderr = '';
 
 		function onMessage({isStdout, txt}) {
-			var s = String.fromCharCode(txt)
+			const s = String.fromCharCode(txt);
 			if (isStdout) {
 				stdout += s;
 			} else {

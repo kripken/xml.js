@@ -8,7 +8,8 @@
   },
   "dependencies": {},
   "scripts": {
-    "test": "./script/test"
+    "test": "./script/test",
+    "lint": "eslint src index.js xmllint_worker.js"
   },
   "repository": {
     "type": "git",
@@ -33,7 +34,7 @@
     "index.js.flow"
   ],
   "devDependencies": {
-    "eslint": "^7.5.0"
+    "eslint": "8.7.0"
   },
   "engines": {
     "node": ">=10.5.0"
