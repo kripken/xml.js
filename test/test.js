@@ -19,7 +19,7 @@ async function testWithValidFile() {
 }
 
 async function testWithValidFileForFormat() {
-	const {valid, normalized, ...result} = await xmllint.validateXML({
+	const {valid, normalized} = await xmllint.validateXML({
 		xml: {fileName: 'valid.xml', contents: xmlValid}, schema,
 		normalization: 'format'
 	});
@@ -29,7 +29,7 @@ async function testWithValidFileForFormat() {
 }
 
 async function testWithValidFileForC14n() {
-	const {valid, normalized, ...result} = await xmllint.validateXML({
+	const {valid, normalized} = await xmllint.validateXML({
 		xml: {fileName: 'valid.xml', contents: xmlValid}, schema,
 		normalization: 'c14n'
 	});
