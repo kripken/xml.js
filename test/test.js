@@ -2,7 +2,6 @@ const fs = require('fs');
 const assert = require('assert').strict;
 const xmllint = require('../index.js');
 const xmlValid = fs.readFileSync('./test/test-valid.xml', 'utf8');
-const xmlValidNormalized = fs.readFileSync('./test/test-valid-normalized.xml', 'utf8');
 const xmlValidFormatted = fs.readFileSync('./test/test-valid-formatted.xml', 'utf8');
 const xmlInvalidFormatted = fs.readFileSync('./test/test-invalid-formatted.xml', 'utf8');
 const xmlValidC14n = fs.readFileSync('./test/test-valid-c14n.xml', 'utf8');
@@ -11,11 +10,13 @@ const schema = fs.readFileSync('./test/test.xsd', 'utf8');
 
 async function testWithValidFile() {
 	const {rawOutput, normalized, ...result} = await xmllint.validateXML({
-		xml: {fileName: 'valid.xml', contents: xmlValid}, schema
+		xml: {fileName: 'valid.xml', contents: xmlValid},
+		schema,
 	});
 
 	assert.deepEqual(result, {valid: true, errors: []});
-	assert.equal(normalized, xmlValidNormalized);
+	// "normalized" should be empty because we didn't pass the "normalization" option
+	assert.equal(normalized, '');
 	assert.equal(rawOutput.trim(), 'valid.xml validates');
 }
 
@@ -59,6 +60,7 @@ async function testWithInvalidFile() {
 		]		
 	};
 
+	assert.equal(normalized, '');
 	assert.deepEqual(result, expectedErrorResult);
 }
 

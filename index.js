@@ -31,9 +31,14 @@ function preprocessOptions(options) {
 		args.push(`--${extension}`);
 		args.push(schema['fileName']);
 	});
+
 	if (normalization) {
 		args.push(`--${normalization}`);
+	} else {
+		// If no normalization is requested, we'll default to no output at all to "normalized" field.
+		args.push('--noout');
 	}
+
 	xmls.forEach(function(xml) {
 		args.push(xml['fileName']);
 	});
@@ -53,7 +58,8 @@ function validationSucceeded(exitCode) {
 
 function validateOption(allowedValues, optionName, actualValue) {
 	if (!allowedValues.includes(actualValue)) {
-		throw new Error(`Invalid value for option ${optionName}: ${actualValue}`);
+		const actualValueStr = typeof actualValue === 'string' ? `"${actualValue}"` : actualValue;
+		throw new Error(`Invalid value for option ${optionName}: ${actualValueStr}`);
 	}
 }
 
