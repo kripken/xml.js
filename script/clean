@@ -3,3 +3,5 @@
 rm -rf ./build
 rm -rf ./libxml2/compile
 rm -rf ./libxml2/m4
+cd libxml2 && git clean -f
+
