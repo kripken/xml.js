@@ -4,6 +4,7 @@ const xmllint = require('../index.js');
 const xmlValid = fs.readFileSync('./test/test-valid.xml', 'utf8');
 const xmlValidNormalized = fs.readFileSync('./test/test-valid-normalized.xml', 'utf8');
 const xmlValidFormatted = fs.readFileSync('./test/test-valid-formatted.xml', 'utf8');
+const xmlInvalidFormatted = fs.readFileSync('./test/test-invalid-formatted.xml', 'utf8');
 const xmlValidC14n = fs.readFileSync('./test/test-valid-c14n.xml', 'utf8');
 const xmlInvalid = fs.readFileSync('./test/test-invalid.xml', 'utf8');
 const schema = fs.readFileSync('./test/test.xsd', 'utf8');
@@ -75,6 +76,7 @@ async function testWithTwoFiles() {
 	const {rawOutput, normalized, ...result} = await xmllint.validateXML({
 		xml: input,
 		schema,
+		normalization: 'format',
 	});
 	const expectedResultForBoth = {
 		'valid': false,
@@ -97,7 +99,8 @@ async function testWithTwoFiles() {
 			}
 		]
 	};
-	
+
+	assert.equal(normalized, xmlValidFormatted + xmlInvalidFormatted);
 	assert.deepEqual(result, expectedResultForBoth);
 }
 
