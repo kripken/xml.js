@@ -1,6 +1,10 @@
 const stdoutBuffer = [];
 const stderrBuffer = [];
 
+function bytesToUtf8(buffer) {
+    return new TextDecoder().decode(Uint8Array.from(buffer));
+}
+
 Module['preRun'] = function () {
 	const inputFiles = Module['inputFiles'];
 	inputFiles.forEach(function(inputFile) {
@@ -14,8 +18,8 @@ Module['stderr'] = stderrBuffer.push.bind(stderrBuffer);
 Module['onExit'] = function(exitCode) {
     postMessage({
         'exitCode': exitCode,
-        'stdout': intArrayToString(stdoutBuffer),
-        'stderr': intArrayToString(stderrBuffer),
+        'stdout': bytesToUtf8(stdoutBuffer),
+        'stderr': bytesToUtf8(stderrBuffer),
     });
 };
 
