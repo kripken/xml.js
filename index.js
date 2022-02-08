@@ -102,37 +102,27 @@ export function validateXML(options) {
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
 
-		let stdout = '';
-		let stderr = '';
-		let exitCode = -1;
-
 		function onmessage(event) {
 			const data = event.data;
-			if (data.stdout) {
-				stdout += String.fromCharCode(data.stdout);
-			} else if (data.stderr) {
-				stderr += String.fromCharCode(data.stderr);
+
+			const valid = validationSucceeded(data.exitCode);
+			if (valid === null) {
+				const err = new Error(data.stderr);
+				err.code = data.exitCode;
+				reject(err);
 			} else {
-				exitCode = data.exitCode;
-				const valid = validationSucceeded(exitCode);
-				if (valid === null) {
-					const err = new Error(stderr);
-					err.code = exitCode;
-					reject(err);
-				} else {
-					resolve({
-						valid: valid,
-						normalized: stdout,
-						errors: valid ? [] : parseErrors(stderr),
-						rawOutput: stderr
-						/* Traditionally, stdout has been suppressed both
-						 * by libxml2 compile options as well as explict
-						 * --noout in arguments; hence »rawOutput« refers
-						 * only to stderr, which is a reasonable attribute value
-						 * despite the slightly odd attribute name.
-						 */
-					});
-				}
+				resolve({
+					valid: valid,
+					normalized: data.stdout,
+					errors: valid ? [] : parseErrors(data.stderr),
+					rawOutput: data.stderr
+					/* Traditionally, stdout has been suppressed both
+					 * by libxml2 compile options as well as explict
+					 * --noout in arguments; hence »rawOutput« refers
+					 * only to stderr, which is a reasonable attribute value
+					 * despite the slightly odd attribute name.
+					 */
+				});
 			}
 		}
 
