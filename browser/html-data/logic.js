@@ -25,7 +25,7 @@ async function process(normalize) {
   const {valid, rawOutput, normalized, ...result} =
     await xmllint.validateXML(
       {xml: {fileName: 'editor.xml', contents: xml},
-      schema,
+      schema: normalize ? undefined : schema,
       normalization: 'format'});
   setStatus(valid, rawOutput);
   if (valid && normalize) {
