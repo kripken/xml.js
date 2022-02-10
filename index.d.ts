@@ -7,13 +7,23 @@ export type XMLFileInfo = {
 
 export type XMLInput = XMLString | XMLFileInfo;
 
+type Schema = { readonly schema: XMLInput | ReadonlyArray<XMLInput> };
+type Normalization = {
+  /**
+   * Pass either --format or --c14n to xmllint to get a formatted
+   * version of the input document to "normalized" property of the result.
+   * normalization: 'format' reformats and reindents the output.
+   * normalization: 'c14n' performs W3C XML Canonicalisation (C14N).
+   */
+  readonly normalization: 'format' | 'c14n';
+};
+
 export type XMLLintOptions = {
   /**
    * XML file contents to validate.
    * Note that xmllint only supports UTF-8 encoded files.
   */
   readonly xml: XMLInput | ReadonlyArray<XMLInput>;
-  readonly schema: XMLInput | ReadonlyArray<XMLInput>;
   /**
    * Other files that should be added to Emscripten's in-memory
    * file system so that xmllint can access them.
@@ -22,18 +32,9 @@ export type XMLLintOptions = {
   readonly preload?: null | undefined | XMLFileInfo | ReadonlyArray<XMLFileInfo>;
   /**
    * @default 'schema'
-  */
-  readonly extension?: 'schema' | 'relaxng',
-  /**
-   * Pass either --format or --c14n to xmllint to get a formatted
-   * version of the input document to "normalized" property of the result.
-   * normalization: 'format' reformats and reindents the output.
-   * normalization: 'c14n' performs W3C XML Canonicalisation (C14N).
-   * Optional. If not specified, the "normalized" property of the output
-   * will be an empty string.
    */
-  readonly normalization?: 'format' | 'c14n',
-};
+  readonly extension?: 'schema' | 'relaxng';
+} & (Schema | Normalization | (Schema & Normalization));
 
 export type XMLValidationError = {
   readonly rawMessage: string;

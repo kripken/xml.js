@@ -20,7 +20,7 @@ function preprocessOptions(options) {
 	const xmls = normalizeInput(options.xml, 'xml');
 	const extension = options.extension || 'schema';
 	validateOption(['schema', 'relaxng'], 'extension', extension);
-	const schemas = normalizeInput(options.schema, 'xsd');
+	const schemas = normalizeInput(options.schema || [], 'xsd');
 	const preloads = normalizeInput(options.preload || [], 'xml');
 	const normalization = options.normalization || '';
 	validateOption(['', 'format', 'c14n'], 'normalization', normalization);
