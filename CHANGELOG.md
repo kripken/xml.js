@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.0
+
+No breaking changes to 2.0.0 - 2.1.0.
+
+* Allow `schema` parameter to be omitted if `normalization` is set. i.e. allow
+  formatting without doing validation to the XML ([PR #5](https://github.com/noppa/xmllint-wasm/pull/5)).
+
 ## 2.1.0
 
 No known breaking changes to 2.0.0.
