@@ -30,6 +30,16 @@ async function testWithValidFileForFormat() {
 	assert.equal(normalized, xmlValidFormatted);
 }
 
+async function testWithValidFileForFormatWithoutSchema() {
+	const {valid, normalized} = await xmllint.validateXML({
+		xml: {fileName: 'valid.xml', contents: xmlValid},
+		normalization: 'format'
+	});
+
+	assert(valid);
+	assert.equal(normalized, xmlValidFormatted);
+}
+
 async function testWithValidFileForC14n() {
 	const {valid, normalized} = await xmllint.validateXML({
 		xml: {fileName: 'valid.xml', contents: xmlValid}, schema,
@@ -121,6 +131,7 @@ async function runTests(...tests) {
 runTests(
 	testWithValidFile,
 	testWithValidFileForFormat,
+	testWithValidFileForFormatWithoutSchema,
 	testWithValidFileForC14n,
 	testWithInvalidFile,
 	testWithTwoFiles,
