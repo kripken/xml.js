@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "rootDir": "../",
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+		"noImplicitAny": true
+  },
+	"include": [
+		"index.d.ts",
+		"typescript.test.ts"
+	]
+}

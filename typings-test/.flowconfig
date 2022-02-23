@@ -1,0 +1,13 @@
+[ignore]
+
+[include]
+../index.js
+flowtype.test.js
+
+[libs]
+
+[lints]
+
+[options]
+
+[strict]
