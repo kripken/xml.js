@@ -1,6 +1,6 @@
 {
   "name": "xmllint-wasm",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Fork of https://www.npmjs.com/package/xmllint with some updates",
   "main": "index.js",
   "directories": {
