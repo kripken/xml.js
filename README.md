@@ -54,7 +54,7 @@ async function example() {
   const validationResult = await validateXML({
     xml: [{
       fileName: 'my-xml-file.xml',
-      contents: myXmlFile,
+      contents: myXMLFile,
     }],
     // All the schema files that are required to validate the documents.
     // The main XSD should be first in the array, followed by its possible dependencies.

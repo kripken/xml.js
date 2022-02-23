@@ -42,4 +42,7 @@ if [ $typescript_result -ne 0 ] || [ $flow_result -ne 0 ]; then
 	echo "Either fix the definitions or tests to match current saved test output, or"
 	echo "run $0 -u to update the saved test output."
 	exit 1
+else
+	echo "TypeScript and Flow definitions are OK."
+	exit 0
 fi
