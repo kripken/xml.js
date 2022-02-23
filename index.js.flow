@@ -9,13 +9,12 @@ export type XMLFileInfo = {|
 
 export type XMLInput = XMLString | XMLFileInfo;
 
-export type XMLLintOptions = {|
+type BaseXMLLintOptions = {|
   /**
    * XML file contents to validate.
    * Note that xmllint only supports UTF-8 encoded files.
   */
   +xml: XMLInput | $ReadOnlyArray<XMLInput>;
-  +schema: XMLInput | $ReadOnlyArray<XMLInput>;
   /**
    * Other files that should be added to Emscripten's in-memory
    * file system so that xmllint can access them.
@@ -26,6 +25,13 @@ export type XMLLintOptions = {|
    * @default 'schema'
   */
   +extension?: 'schema' | 'relaxng',
+|};
+
+export type XMLLintOptionsForValidation = {| 
+  +schema: XMLInput | $ReadOnlyArray<XMLInput>;
+  ...BaseXMLLintOptions,
+|};
+export type XMLLintOptionsForNormalization = {|
   /**
    * Pass either --format or --c14n to xmllint to get a formatted
    * version of the input document to "normalized" property of the result.
@@ -34,8 +40,18 @@ export type XMLLintOptions = {|
    * Optional. If not specified, the "normalized" property of the output
    * will be an empty string.
    */
-  +normalization?: 'format' | 'c14n',
-|};
+  +normalization: 'format' | 'c14n',
+  ...BaseXMLLintOptions,
+|}
+export type XMLLintOptionsForValidationAndNormalization = {|
+  ...XMLLintOptionsForValidation,
+  ...XMLLintOptionsForNormalization,
+|}
+
+export type XMLLintOptions =
+  | XMLLintOptionsForValidation
+  | XMLLintOptionsForNormalization
+  | XMLLintOptionsForValidationAndNormalization; 
 
 export type XMLValidationError = {|
   +rawMessage: string;

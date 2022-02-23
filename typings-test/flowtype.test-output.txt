@@ -1,26 +1,10 @@
-Error -------------------------------------------------------------------------------------------- flowtype.test.js:4:21
-
-Cannot call `xmllint.validateXML` with object literal bound to `options` because property `schema` is missing in object
-literal [1] but exists in `XMLLintOptions` [2]. [prop-missing]
-
-   flowtype.test.js:4:21
-                           v
-    4| xmllint.validateXML({
-    5| 	xml: [],
-    6| 	normalization: 'format',
-    7| });
-       ^ [1]
-
-References:
-   ../index.js.flow:67:46
-   67| declare export function validateXML(options: XMLLintOptions): Promise<XMLValidationResult>;
-                                                    ^^^^^^^^^^^^^^ [2]
-
-
 Error -------------------------------------------------------------------------------------------- flowtype.test.js:9:21
 
-Cannot call `xmllint.validateXML` with object literal bound to `options` because property `schema` is missing in object
-literal [1] but exists in `XMLLintOptions` [2]. [prop-missing]
+Cannot call `xmllint.validateXML` with object literal bound to `options` because: [incompatible-call]
+ - Either property `schema` is missing in object literal [1] but exists in `XMLLintOptionsForValidation` [2].
+ - Or property `normalization` is missing in object literal [1] but exists in `XMLLintOptionsForNormalization` [3].
+ - Or property `normalization` is missing in object literal [1] but exists in
+   `XMLLintOptionsForValidationAndNormalization` [4].
 
    flowtype.test.js:9:21
                            v
@@ -30,28 +14,16 @@ literal [1] but exists in `XMLLintOptions` [2]. [prop-missing]
        ^ [1]
 
 References:
-   ../index.js.flow:67:46
-   67| declare export function validateXML(options: XMLLintOptions): Promise<XMLValidationResult>;
-                                                    ^^^^^^^^^^^^^^ [2]
-
-
-Error -------------------------------------------------------------------------------------------- flowtype.test.js:9:21
-
-Cannot call `xmllint.validateXML` with object literal bound to `options` because property `xml` is missing in object
-literal [1] but exists in `XMLLintOptions` [2]. [prop-missing]
-
-   flowtype.test.js:9:21
-                           v
-    9| xmllint.validateXML({
-   10| 	// Error expected: normalization or schema param is required
-   11| });
-       ^ [1]
-
-References:
-   ../index.js.flow:67:46
-   67| declare export function validateXML(options: XMLLintOptions): Promise<XMLValidationResult>;
-                                                    ^^^^^^^^^^^^^^ [2]
+   ../index.js.flow:52:5
+   52|   | XMLLintOptionsForValidation
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^ [2]
+   ../index.js.flow:53:5
+   53|   | XMLLintOptionsForNormalization
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ [3]
+   ../index.js.flow:54:5
+   54|   | XMLLintOptionsForValidationAndNormalization; 
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ [4]
 
 
 
-Found 3 errors
+Found 1 error
