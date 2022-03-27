@@ -137,7 +137,3 @@ export function validateXML(options) {
 		worker.postMessage(preprocessedOptions);
 	});
 }
-
-export default {
-	validateXML
-}
