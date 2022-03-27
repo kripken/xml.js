@@ -1,4 +1,3 @@
-
 const workerModule = 'xmllint/xmllint_worker.js';
 
 function normalizeInput(fileInput, extension) {
@@ -96,8 +95,7 @@ function parseErrors(/** @type {string} */ output) {
 	});
 }
 
-export function validateXML(options) {
-
+export const validateXML = (options) => {
 	const preprocessedOptions = preprocessOptions(options);
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
@@ -136,4 +134,4 @@ export function validateXML(options) {
 		worker.onerror = onerror;
 		worker.postMessage(preprocessedOptions);
 	});
-}
+};
