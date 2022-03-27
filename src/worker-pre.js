@@ -1,4 +1,4 @@
-// ifdef node
+// #ifdef node
 const {parentPort} = require('worker_threads');
 // #endif
 
@@ -33,6 +33,4 @@ Module['onExit'] = function(exitCode) {
 	// #endif
 };
 
-(function() {
-	Module['arguments'] = Module['args'];
-})();
+Module['arguments'] = Module['args'];
