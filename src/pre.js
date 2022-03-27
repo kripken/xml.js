@@ -1,8 +1,12 @@
+// ifdef node
+const {parentPort} = require('worker_threads');
+// #endif
+
 const stdoutBuffer = [];
 const stderrBuffer = [];
 
 function bytesToUtf8(buffer) {
-    return new TextDecoder().decode(Uint8Array.from(buffer));
+	return new TextDecoder().decode(Uint8Array.from(buffer));
 }
 
 Module['preRun'] = function () {
@@ -16,11 +20,17 @@ Module['stdout'] = stdoutBuffer.push.bind(stdoutBuffer);
 Module['stderr'] = stderrBuffer.push.bind(stderrBuffer);
 
 Module['onExit'] = function(exitCode) {
-    postMessage({
-        'exitCode': exitCode,
-        'stdout': bytesToUtf8(stdoutBuffer),
-        'stderr': bytesToUtf8(stderrBuffer),
-    });
+	const message = {
+		'exitCode': exitCode,
+		'stdout': bytesToUtf8(stdoutBuffer),
+		'stderr': bytesToUtf8(stderrBuffer),
+	};
+	// #ifdef node
+	parentPort.postMessage(message);
+	// #endif
+	// #ifdef browser
+	postMessage(message);
+	// #endif
 };
 
 (function() {

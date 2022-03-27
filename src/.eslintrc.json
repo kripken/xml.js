@@ -3,6 +3,7 @@
 	"globals": {
 		"Module": false,
 		"FS": false,
-		"intArrayFromString": false
+		"intArrayFromString": false,
+		"postMessage": false
 	}
 }

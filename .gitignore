@@ -8,5 +8,9 @@ bundle.js
 # Build output
 xmllint.js
 xmllint.wasm
+xmllint-browser.js
+xmllint-browser.wasm
+xmllint-node.js
+xmllint-node.wasm
 
 /browser/html-data/xmllint

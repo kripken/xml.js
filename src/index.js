@@ -1,3 +1,7 @@
+// #ifdef node
+const {Worker} = require('worker_threads');
+// #endif
+
 const workerModule = 'xmllint/xmllint_worker.js';
 
 function normalizeInput(fileInput, extension) {
@@ -95,7 +99,7 @@ function parseErrors(/** @type {string} */ output) {
 	});
 }
 
-export const validateXML = (options) => {
+function validateXML(options) {
 	const preprocessedOptions = preprocessOptions(options);
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
@@ -134,4 +138,11 @@ export const validateXML = (options) => {
 		worker.onerror = onerror;
 		worker.postMessage(preprocessedOptions);
 	});
-};
+}
+
+// #ifdef node
+module.exports.validateXML = validateXML;
+// #endif
+// #ifdef browser
+export { validateXML };
+// #endif
