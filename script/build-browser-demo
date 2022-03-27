@@ -2,9 +2,9 @@
 
 set -eu
 
-cd "$(dirname "$0")"
+cd "$(dirname "$0")/../browser"
 
 mkdir -p html-data/xmllint
 
-cp -va --target=html-data/xmllint ../xmllint.wasm ../xmllint_worker.js ../xmllint.js ../index.js
+cp -va --target=html-data/xmllint ../xmllint.wasm ../xmllint-browser.js ../index-browser.js
 

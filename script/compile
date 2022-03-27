@@ -1,33 +1,44 @@
 #!/bin/bash
 
 function use_emcc() {
-emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
-
-	-s MODULARIZE=true \
-	-s NO_EXIT_RUNTIME=0 \
-	-s EXPORT_NAME=Module \
-	--closure 1 \
-	--memory-init-file 0 \
-	./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
-	--pre-js ./build/worker-pre-js.js
+	emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
+		-s MODULARIZE=true \
+		-s NO_EXIT_RUNTIME=0 \
+		-s EXPORT_NAME=Module \
+		--closure 1 \
+		--memory-init-file 0 \
+		./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
+		-o xmllint.js \
+		--pre-js ./build/pre.js \
+		--extern-post-js ./build/worker-init.js \
+		$@
 }
 
 mkdir -p build
 
+function compile_js_file() {
+	local compile_env="$1"
+	local infile="$2"
+	local outfile=${3:-"./build/$(basename "$infile")"}
+
+	awk -f ./script/preprocess-js.awk -v env="$compile_env" \
+		"$infile"  > "$outfile"
+}
+
 function compile_js() {
 	local compile_env="$1"
 
-	awk -f ./script/preprocess-js.awk -v env="$compile_env" \
-		./src/pre.js  > ./build/worker-pre-js.js
-
-	awk -f ./script/preprocess-js.awk -v env="$compile_env" \
-		./src/index.js  > "./xmllint-$compile_env.js"
+	compile_js_file "$compile_env" ./src/worker-pre.js
+	compile_js_file "$compile_env" ./src/worker-init.js
+	compile_js_file "$compile_env" ./src/index.js "./index-$compile_env.js"
 }
 
 # Browser build
 compile_js browser
-use_emcc -s ENVIRONMENT=web -o xmllint-browser.js
+use_emcc -s ENVIRONMENT=web
+mv xmllint.js ./xmllint-browser.js
 
-# Node build
+# # Node build
 compile_js node
-use_emcc -s ENVIRONMENT=node,worker -o xmllint-node.js
+use_emcc -s ENVIRONMENT=node,worker
+mv xmllint.js ./xmllint-node.js

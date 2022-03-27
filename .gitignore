@@ -12,5 +12,7 @@ xmllint-browser.js
 xmllint-browser.wasm
 xmllint-node.js
 xmllint-node.wasm
+index-browser.js
+index-node.js
 
 /browser/html-data/xmllint

@@ -1,5 +1,5 @@
 
-import xmllint from './xmllint/index.js';
+import * as xmllint from './xmllint/index-browser.js';
 
 function getXml() {
 	return document.getElementById('xml').value;

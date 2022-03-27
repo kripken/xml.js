@@ -1,7 +1,6 @@
-
-importScripts('xmllint.js');
-
-onmessage = function(event) {
+console.log('init');
+addEventListener('message', function onWorkerMessage(event) {
+	console.log('onmessage', event);
 	function stderr(txt) {
 		postMessage({stderr: txt});
 	}
@@ -11,4 +10,4 @@ onmessage = function(event) {
 		args: event.data.args,
 		stderr: stderr,
 	});
-}
+});

@@ -1,8 +1,9 @@
 // #ifdef node
 const {Worker} = require('worker_threads');
 // #endif
-
-const workerModule = 'xmllint/xmllint_worker.js';
+// #ifdef browser
+const workerModule = './xmllint/xmllint-browser.js';
+// #endif
 
 function normalizeInput(fileInput, extension) {
 	if (!Array.isArray(fileInput)) fileInput = [fileInput];

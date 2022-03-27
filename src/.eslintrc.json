@@ -4,6 +4,7 @@
 		"Module": false,
 		"FS": false,
 		"intArrayFromString": false,
-		"postMessage": false
+		"postMessage": false,
+		"addEventListener": false
 	}
 }
