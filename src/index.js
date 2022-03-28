@@ -1,10 +1,4 @@
 'use strict';
-// #ifdef browser
-var workerModule = './xmllint-browser.js';
-// #ifdef node
-var workerModule = require.resolve('./xmllint-node.js');
-const {Worker} = require('worker_threads');
-// #endif
 
 function normalizeInput(fileInput, extension) {
 	if (!Array.isArray(fileInput)) fileInput = [fileInput];
@@ -137,7 +131,12 @@ function validateXML(options) {
 			reject(err);
 		}
 
-		const worker = new Worker(workerModule);
+		// #ifdef browser
+		var worker = new Worker(new URL('./xmllint-browser.js', import.meta.url));
+		// #ifdef node
+		const {Worker} = require('worker_threads');
+		var worker = new Worker('./xmllint-node.js');
+		// #endif
 
 		// #ifdef browser
 		var addEventListener = worker.addEventListener.bind(worker);
