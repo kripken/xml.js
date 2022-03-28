@@ -1,15 +1,9 @@
 'use strict';
-// #ifdef node
-const {Worker} = require('worker_threads');
-// #endif
-
 // #ifdef browser
-// eslint-disable-next-line no-var
 var workerModule = './xmllint-browser.js';
-// #endif
 // #ifdef node
-// eslint-disable-next-line no-var, no-redeclare
 var workerModule = require.resolve('./xmllint-node.js');
+const {Worker} = require('worker_threads');
 // #endif
 
 function normalizeInput(fileInput, extension) {
@@ -157,8 +151,8 @@ function validateXML(options) {
 	});
 }
 
-// #ifdef node
-module.exports.validateXML = validateXML;
 // #ifdef browser
 export { validateXML };
+// #ifdef node
+module.exports.validateXML = validateXML;
 // #endif
