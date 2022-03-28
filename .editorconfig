@@ -1,5 +1,10 @@
-[*.{js,json}]
+[*.{js,ts,json}]
 indent_style = tab
 indent_size = 2
 end_of_line = lf
 insert_final_newline = true
+
+# package.json has existing indentation and it's not worth it to reformat right now
+[package.json]
+indent_style = space
+indent_size = 2

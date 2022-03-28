@@ -9,7 +9,6 @@
 		"noImplicitAny": true
   },
 	"include": [
-		"index.d.ts",
 		"typescript.test.ts"
 	]
 }

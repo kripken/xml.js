@@ -33,6 +33,9 @@ function compile_js() {
 	compile_js_file "$compile_env" ./src/worker-pre.js
 	compile_js_file "$compile_env" ./src/worker-post.js
 	compile_js_file "$compile_env" ./src/index.js "./index-$compile_env.js"
+
+	cp ./src/index.d.ts "./index-$compile_env.d.ts"
+	cp ./src/index.js.flow "./index-$compile_env.js.flow"
 }
 
 # Browser build

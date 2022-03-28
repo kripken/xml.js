@@ -26,12 +26,15 @@
     "url": "https://github.com/noppa/xml.js/issues"
   },
   "files": [
-    "index.js",
-    "xmllint_worker.js",
-    "xmllint.js",
+    "index-browser.js",
+    "index-node.js",
+    "xmllint-browser.js",
+    "xmllint-node.js",
     "xmllint.wasm",
-    "index.d.ts",
-    "index.js.flow"
+    "index-browser.d.ts",
+    "index-browser.js.flow",
+    "index-node.d.ts",
+    "index-node.js.flow"
   ],
   "devDependencies": {
     "@types/node": "^17.0.21",
