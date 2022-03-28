@@ -1,8 +1,15 @@
+'use strict';
 // #ifdef node
 const {Worker} = require('worker_threads');
 // #endif
+
 // #ifdef browser
-const workerModule = './xmllint/xmllint-browser.js';
+// eslint-disable-next-line no-var
+var workerModule = './xmllint-browser.js';
+// #endif
+// #ifdef node
+// eslint-disable-next-line no-var, no-redeclare
+var workerModule = require.resolve('./xmllint-node.js');
 // #endif
 
 function normalizeInput(fileInput, extension) {
@@ -104,9 +111,12 @@ function validateXML(options) {
 	const preprocessedOptions = preprocessOptions(options);
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
-
 		function onmessage(event) {
-			const data = event.data;
+			// #ifdef browser
+			var data = event.data;
+			// #ifdef node
+			var data = event;
+			// #endif
 
 			const valid = validationSucceeded(data.exitCode);
 			if (valid === null) {
@@ -130,20 +140,25 @@ function validateXML(options) {
 		}
 
 		function onerror(err) {
-			console.error('Unexpected error event from worker: ' + err);
 			reject(err);
 		}
 
 		const worker = new Worker(workerModule);
-		worker.onmessage = onmessage;
-		worker.onerror = onerror;
+
+		// #ifdef browser
+		var addEventListener = worker.addEventListener.bind(worker);
+		// #ifdef node
+		var addEventListener = worker.on.bind(worker);
+		// #endif
+
+		addEventListener('message', onmessage);
+		addEventListener('error', onerror);
 		worker.postMessage(preprocessedOptions);
 	});
 }
 
 // #ifdef node
 module.exports.validateXML = validateXML;
-// #endif
 // #ifdef browser
 export { validateXML };
 // #endif

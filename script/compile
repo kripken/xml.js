@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 function use_emcc() {
 	emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
 		-s MODULARIZE=true \
@@ -9,8 +11,8 @@ function use_emcc() {
 		--memory-init-file 0 \
 		./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
 		-o xmllint.js \
-		--pre-js ./build/pre.js \
-		--extern-post-js ./build/worker-init.js \
+		--pre-js ./build/worker-pre.js \
+		--extern-post-js ./build/worker-post.js \
 		$@
 }
 
@@ -29,14 +31,14 @@ function compile_js() {
 	local compile_env="$1"
 
 	compile_js_file "$compile_env" ./src/worker-pre.js
-	compile_js_file "$compile_env" ./src/worker-init.js
+	compile_js_file "$compile_env" ./src/worker-post.js
 	compile_js_file "$compile_env" ./src/index.js "./index-$compile_env.js"
 }
 
 # Browser build
-compile_js browser
-use_emcc -s ENVIRONMENT=web
-mv xmllint.js ./xmllint-browser.js
+# compile_js browser
+# use_emcc -s ENVIRONMENT=web
+# mv xmllint.js ./xmllint-browser.js
 
 # # Node build
 compile_js node

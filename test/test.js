@@ -1,6 +1,7 @@
+'use strict';
 const fs = require('fs');
 const assert = require('assert').strict;
-const xmllint = require('../index.js');
+const xmllint = require('../index-node.js');
 const xmlValid = fs.readFileSync('./test/test-valid.xml', 'utf8');
 const xmlValidFormatted = fs.readFileSync('./test/test-valid-formatted.xml', 'utf8');
 const xmlInvalidFormatted = fs.readFileSync('./test/test-invalid-formatted.xml', 'utf8');
