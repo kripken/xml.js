@@ -36,6 +36,16 @@
 			stderr: stderrBuffer.push.bind(stderrBuffer),
 			stdout: stdoutBuffer.push.bind(stdoutBuffer),
 			onExit,
+			// #ifdef browser
+			locateFile(path) {
+				if (path !== 'xmllint.wasm') {
+					return path;
+				}
+				// Fix wasm file path to be relative to the worker file path.
+				// This also makes bundlers automatically pick up the wasm file.
+				return new URL('./xmllint.wasm', import.meta.url).href;
+			}
+			// #endif
 		});
 	}
 

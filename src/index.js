@@ -132,7 +132,7 @@ function validateXML(options) {
 		}
 
 		// #ifdef browser
-		var worker = new Worker(new URL('./xmllint-browser.js', import.meta.url));
+		var worker = new Worker(new URL('./xmllint-browser.js', import.meta.url), {type: 'module'});
 		// #ifdef node
 		const {Worker} = require('worker_threads');
 		var worker = new Worker('./xmllint-node.js');
