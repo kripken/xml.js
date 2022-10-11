@@ -4,7 +4,7 @@ set -eu
 
 function use_emcc() {
 	emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
-		-s MODULARIZE=true \
+		-s MODULARIZE=1 \
 		-s NO_EXIT_RUNTIME=0 \
 		-s EXPORT_NAME=Module \
 		--closure 1 \
