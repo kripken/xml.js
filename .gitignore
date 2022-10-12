@@ -3,8 +3,22 @@
 
 node_modules/
 build/
+dist/
 bundle.js
+.parcel-cache/
 
 # Build output
 xmllint.js
 xmllint.wasm
+xmllint-browser.js
+xmllint-browser.wasm
+xmllint-node.js
+xmllint-node.wasm
+index-browser.js
+index-node.js
+index-browser.d.ts
+index-browser.js.flow
+index-node.d.ts
+index-node.js.flow
+
+/browser-demo/html-data/xmllint

@@ -1,10 +1,49 @@
 #!/bin/bash
 
-emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
-	-s ENVIRONMENT=node,worker \
-	-s MODULARIZE=true \
-	-s EXPORT_NAME=Module \
-	--closure 1 \
-	--memory-init-file 0 \
-	./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
-	-o xmllint.js --pre-js ./src/pre.js
+set -eu
+
+function use_emcc() {
+	emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
+		-s MODULARIZE=1 \
+		-s NO_EXIT_RUNTIME=0 \
+		-s EXPORT_NAME=Module \
+		--closure 1 \
+		--memory-init-file 0 \
+		./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
+		-o xmllint.js \
+		--pre-js ./build/worker-pre.js \
+		--extern-post-js ./build/worker-post.js \
+		$@
+}
+
+mkdir -p build
+
+function compile_js_file() {
+	local compile_env="$1"
+	local infile="$2"
+	local outfile=${3:-"./build/$(basename "$infile")"}
+
+	awk -f ./script/preprocess-js.awk -v env="$compile_env" \
+		"$infile"  > "$outfile"
+}
+
+function compile_js() {
+	local compile_env="$1"
+
+	compile_js_file "$compile_env" ./src/worker-pre.js
+	compile_js_file "$compile_env" ./src/worker-post.js
+	compile_js_file "$compile_env" ./src/index.js "./index-$compile_env.js"
+
+	cp ./src/index.d.ts "./index-$compile_env.d.ts"
+	cp ./src/index.js.flow "./index-$compile_env.js.flow"
+}
+
+# Browser build
+compile_js browser
+use_emcc -s ENVIRONMENT=web
+mv xmllint.js ./xmllint-browser.js
+
+# Node build
+compile_js node
+use_emcc -s ENVIRONMENT=node,worker
+mv xmllint.js ./xmllint-node.js

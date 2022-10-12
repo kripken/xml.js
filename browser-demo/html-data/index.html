@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <title>XML validation and normalization</title>
+</head>
+<body>
+  <div>
+    <textarea id="xml" cols="80" rows="40"><?xml version="1.0"?>
+<!-- XML content – insert by copy &amp; paste -->
+<root>
+  <content>Hello, world!</content>
+</root>
+</textarea>
+    <textarea id="schema" cols="80" rows="40"><?xml version="1.0"?>
+<!-- XML schema – insert by copy &amp; paste -->
+</textarea>
+    <textarea id="messages" cols="80" rows="40">Messages – editing is pointless</textarea>
+  </div>
+  <div>
+    <button type="button" id="validate">Validate</button>
+    <button type="button" id="normalize">Normalize</button>
+  </div>
+
+  <script type="module">
+
+    import {validate, normalize} from './logic.js';
+
+    document.querySelector('#validate').addEventListener('click', validate);
+    document.querySelector('#normalize').addEventListener('click', normalize);
+
+  </script>
+</body>
+</html>

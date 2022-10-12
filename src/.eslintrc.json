@@ -3,6 +3,13 @@
 	"globals": {
 		"Module": false,
 		"FS": false,
-		"intArrayFromString": false
+		"intArrayFromString": false,
+		"postMessage": false,
+		"addEventListener": false
+	},
+	"rules": {
+		"no-extra-semi": "off",
+		"no-var": "off",
+		"no-redeclare": "off"
 	}
 }

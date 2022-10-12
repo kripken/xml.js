@@ -1,2 +1,11 @@
 xmllint.js
 index.js.flow
+
+# Build output
+xmllint.js
+xmllint-browser.js
+xmllint-node.js
+index-browser.js
+index-node.js
+
+/browser-demo/html-data/xmllint

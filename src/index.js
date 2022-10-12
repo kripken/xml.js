@@ -1,6 +1,4 @@
-
-const { Worker } = require('worker_threads');
-const workerModule = require.resolve('./xmllint_worker.js');
+'use strict';
 
 function normalizeInput(fileInput, extension) {
 	if (!Array.isArray(fileInput)) fileInput = [fileInput];
@@ -19,6 +17,7 @@ function normalizeInput(fileInput, extension) {
 function preprocessOptions(options) {
 	const xmls = normalizeInput(options.xml, 'xml');
 	const extension = options.extension || 'schema';
+
 	validateOption(['schema', 'relaxng'], 'extension', extension);
 	const schemas = normalizeInput(options.schema || [], 'xsd');
 	const preloads = normalizeInput(options.preload || [], 'xml');
@@ -43,7 +42,7 @@ function preprocessOptions(options) {
 		args.push(xml['fileName']);
 	});
 
-	return { inputFiles, args };
+	return {inputFiles, args};
 }
 
 function validationSucceeded(exitCode) {
@@ -63,7 +62,7 @@ function validateOption(allowedValues, optionName, actualValue) {
 	}
 }
 
-function parseErrors(/** @type {string} */output) {
+function parseErrors(/** @type {string} */ output) {
 	const errorLines = output
 		.split('\n')
 		.slice(0, -2);
@@ -100,35 +99,24 @@ function validateXML(options) {
 	const preprocessedOptions = preprocessOptions(options);
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
+		function onmessage(event) {
+			// #ifdef browser
+			var data = event.data;
+			// #ifdef node
+			var data = event;
+			// #endif
 
-		const worker = new Worker(workerModule, {
-			workerData: preprocessedOptions
-		});
-
-		let stdout = '';
-		let stderr = '';
-
-		function onMessage({isStdout, txt}) {
-			const s = String.fromCharCode(txt);
-			if (isStdout) {
-				stdout += s;
-			} else {
-				stderr += s;
-			}
-		}
-
-		function onExit(exitCode) {
-			const valid = validationSucceeded(exitCode);
+			const valid = validationSucceeded(data.exitCode);
 			if (valid === null) {
-				const err = new Error(stderr);
-				err.code = exitCode;
+				const err = new Error(data.stderr);
+				err.code = data.exitCode;
 				reject(err);
 			} else {
 				resolve({
 					valid: valid,
-					normalized: stdout,
-					errors: valid ? [] : parseErrors(stderr),
-					rawOutput: stderr
+					normalized: data.stdout,
+					errors: valid ? [] : parseErrors(data.stderr),
+					rawOutput: data.stderr
 					/* Traditionally, stdout has been suppressed both
 					 * by libxml2 compile options as well as explict
 					 * --noout in arguments; hence »rawOutput« refers
@@ -139,15 +127,31 @@ function validateXML(options) {
 			}
 		}
 
-		function onError(err) {
-			console.error('Unexpected error event from worker: ' + err);
+		function onerror(err) {
 			reject(err);
 		}
 
-		worker.on('message', onMessage);
-		worker.on('exit', onExit);
-		worker.on('error', onError);
+		// #ifdef browser
+		var worker = new Worker(new URL('./xmllint-browser.js', import.meta.url), {type: 'module'});
+		// #ifdef node
+		const {Worker} = require('worker_threads');
+		var worker = new Worker('./xmllint-node.js');
+		// #endif
+
+		// #ifdef browser
+		var addEventListener = worker.addEventListener.bind(worker);
+		// #ifdef node
+		var addEventListener = worker.on.bind(worker);
+		// #endif
+
+		addEventListener('message', onmessage);
+		addEventListener('error', onerror);
+		worker.postMessage(preprocessedOptions);
 	});
 }
 
+// #ifdef browser
+export { validateXML };
+// #ifdef node
 module.exports.validateXML = validateXML;
+// #endif

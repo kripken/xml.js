@@ -2,13 +2,14 @@
   "name": "xmllint-wasm",
   "version": "2.2.0",
   "description": "Fork of https://www.npmjs.com/package/xmllint with some updates",
-  "main": "index.js",
+  "main": "index-node.js",
+  "browser": "index-browser.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
     "test": "./script/test",
-    "lint": "eslint src index.js xmllint_worker.js",
+    "lint": "eslint src",
     "check-types": "./typings-test/run-typings-test.sh"
   },
   "repository": {
@@ -23,17 +24,22 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/noppa/xml.js/issues"
+    "url": "https://github.com/noppa/xmllint-wasm/issues"
   },
   "files": [
-    "index.js",
-    "xmllint_worker.js",
-    "xmllint.js",
+    "index-browser.js",
+    "index-node.js",
+    "xmllint-browser.js",
+    "xmllint-node.js",
     "xmllint.wasm",
-    "index.d.ts",
-    "index.js.flow"
+    "index-browser.d.ts",
+    "index-browser.js.flow",
+    "index-node.d.ts",
+    "index-node.js.flow"
   ],
   "devDependencies": {
+    "@babel/core": "^7.19.3",
+    "@babel/plugin-transform-flow-strip-types": "^7.19.0",
     "@types/node": "^17.0.21",
     "eslint": "8.7.0",
     "flow-bin": "^0.172.0",

@@ -1,7 +1,7 @@
 [ignore]
 
 [include]
-../index.js
+../index-node.js
 flowtype.test.js
 
 [libs]
