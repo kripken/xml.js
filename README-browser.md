@@ -11,7 +11,7 @@
 
 * `./script/compile`
 
-* `./scropt/build-browser-demo`
+* `./script/build-browser-demo`
 
 * `./browser-demo/run_http_server &`
 
