@@ -43,7 +43,7 @@ compile_js browser
 use_emcc -s ENVIRONMENT=web
 mv xmllint.js ./xmllint-browser.js
 
-# # Node build
+# Node build
 compile_js node
 use_emcc -s ENVIRONMENT=node,worker
 mv xmllint.js ./xmllint-node.js

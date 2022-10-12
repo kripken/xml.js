@@ -1,4 +1,8 @@
-<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  >
+ <xsd:include schemaLocation="comment.xsd" />
 
  <xsd:annotation>
   <xsd:documentation xml:lang="en">
@@ -8,8 +12,6 @@
  </xsd:annotation>
 
  <xsd:element name="purchaseOrder" type="PurchaseOrderType"/>
-
- <xsd:element name="comment" type="xsd:string"/>
 
  <xsd:complexType name="PurchaseOrderType">
   <xsd:sequence>
