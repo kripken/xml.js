@@ -3,14 +3,6 @@
 <head>
   <meta charset="utf-8" />
   <title>XML validation and normalization</title>
-  <script type="module">
-
-    import {validate, normalize} from './logic.js';
-
-    document.querySelector('#validate').addEventListener('click', validate);
-    document.querySelector('#normalize').addEventListener('click', normalize);
-
-  </script>
 </head>
 <body>
   <div>
@@ -29,5 +21,14 @@
     <button type="button" id="validate">Validate</button>
     <button type="button" id="normalize">Normalize</button>
   </div>
+
+  <script type="module">
+
+    import {validate, normalize} from './logic.js';
+
+    document.querySelector('#validate').addEventListener('click', validate);
+    document.querySelector('#normalize').addEventListener('click', normalize);
+
+  </script>
 </body>
 </html>

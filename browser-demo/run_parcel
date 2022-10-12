@@ -1,0 +1,12 @@
+#!/bin/bash
+
+# Little script to verify that the browser build can be used from a bundler that
+# supports Web Worker loading with the new URL() syntax. Parcel is used here
+# because it works without much configuration, but the same should also work with
+# Webpack and others.
+
+set -eu
+
+cd "$(dirname "$0")"
+
+npx parcel ./html-data/index.html 
