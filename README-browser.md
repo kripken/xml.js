@@ -11,9 +11,9 @@
 
 * `./script/compile`
 
-* `./browser/dist`
+* `./scropt/build-browser-demo`
 
-* `./browser/run_http_server &`
+* `./browser-demo/run_http_server &`
 
 * Open *http://localhost:8088/* in your browser and run the example application.
 
