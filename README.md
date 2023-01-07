@@ -105,6 +105,21 @@ The Promise resolved with a object like the following
 }
 ```
 
+### Usage in browsers
+
+Check [./browser-demo/html-data](./browser-demo/html-data) index.html and logic.js for a full example.
+Import the browser version a module and use like you would use the Node-version.
+
+Works out of the box in latest Chrome, Edge and Safari.  
+Firefox, however, does not yet support Worker modules which is required by the implementation
+in this library (tracked in issue [1247687](https://bugzilla.mozilla.org/show_bug.cgi?id=1247687)).
+To get Firefox to work, you'll need to use a bundler like [Parcel](https://parceljs.org/) or
+Webpack to bundle the sources from modules to regular old scripts.
+
+```javascript
+import * as xmllint from './node_modules/xmllint/index-browser.mjs';
+```
+
 ## Building xmllint from source
 
 Clone the project (including the submodulem with git `--recursive`) and build.  

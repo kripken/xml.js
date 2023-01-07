@@ -1,3 +1,4 @@
+# Building the browser demo from source
 
 * `git submodule init`
 
@@ -19,4 +20,4 @@
 
 * Find example files to copy & paste in `./test`.
 
-* Find the sources of the example application in `./browser/html-data/`
+* Find the sources of the example application in `./browser-demo/html-data/`
