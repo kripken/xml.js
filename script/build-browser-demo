@@ -2,7 +2,7 @@
 
 set -eu
 
-cd "$(dirname "$0")/../browser"
+cd "$(dirname "$0")/../browser-demo"
 
 mkdir -p html-data/xmllint
 
