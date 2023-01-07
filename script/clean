@@ -1,7 +1,8 @@
 #!/bin/bash
 
-rm xmllint-{browser,node}.js xmllint.js index-{browser,node}.js
+rm -f xmllint-{browser.mjs,node.js} xmllint.js xmllint.wasm index-{browser.mjs,node.js} \
+	index-{browser,node}.{d.ts,js.flow,mjs.flow}
 rm -rf ./build
 rm -rf ./libxml2/compile
 rm -rf ./libxml2/m4
-cd libxml2 && git clean -f
+cd libxml2 && git clean -f && git reset --hard HEAD

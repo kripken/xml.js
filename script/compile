@@ -29,19 +29,23 @@ function compile_js_file() {
 
 function compile_js() {
 	local compile_env="$1"
+	local js_name="./index-$compile_env.js"
+	if [ "$compile_env" = "browser" ]; then
+		js_name="./index-$compile_env.mjs"
+	fi
 
 	compile_js_file "$compile_env" ./src/worker-pre.js
 	compile_js_file "$compile_env" ./src/worker-post.js
-	compile_js_file "$compile_env" ./src/index.js "./index-$compile_env.js"
+	compile_js_file "$compile_env" ./src/index.js "$js_name"
 
 	cp ./src/index.d.ts "./index-$compile_env.d.ts"
-	cp ./src/index.js.flow "./index-$compile_env.js.flow"
+	cp ./src/index.js.flow "$js_name.flow"
 }
 
 # Browser build
 compile_js browser
 use_emcc -s ENVIRONMENT=web
-mv xmllint.js ./xmllint-browser.js
+mv xmllint.js ./xmllint-browser.mjs
 
 # Node build
 compile_js node

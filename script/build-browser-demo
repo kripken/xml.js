@@ -6,5 +6,5 @@ cd "$(dirname "$0")/../browser-demo"
 
 mkdir -p html-data/xmllint
 
-cp -va --target=html-data/xmllint ../xmllint.wasm ../xmllint-browser.js ../index-browser.js
+cp -va --target=html-data/xmllint ../xmllint.wasm ../xmllint-browser.mjs ../index-browser.mjs
 

@@ -10,14 +10,14 @@ bundle.js
 # Build output
 xmllint.js
 xmllint.wasm
-xmllint-browser.js
+xmllint-browser.mjs
 xmllint-browser.wasm
 xmllint-node.js
 xmllint-node.wasm
-index-browser.js
+index-browser.mjs
 index-node.js
 index-browser.d.ts
-index-browser.js.flow
+index-browser.mjs.flow
 index-node.d.ts
 index-node.js.flow
 
