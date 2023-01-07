@@ -1,5 +1,16 @@
 # Changelog
 
+## 3.0.0
+
+Should not contain breaking changes for most users, but there are
+some internal file renames so I'm doing a major version bump just
+in case someone was importing old files like index.js directly. 
+`require('xmllint-wasm')` should still work as before.
+
+* Upgrade libxml2 to 2.10.3
+* Add browser support (fixes [#1](https://github.com/noppa/xmllint-wasm/issues/1)),
+  thanks [@fhaftmann](https://github.com/fhaftmann) and [@th-we](https://github.com/th-we)!
+
 ## 2.2.0
 
 No breaking changes to 2.0.0 - 2.1.0.
