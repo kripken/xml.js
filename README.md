@@ -108,11 +108,11 @@ The Promise resolved with a object like the following
 ### Usage in browsers
 
 Check [./browser-demo/html-data](./browser-demo/html-data) index.html and
-logic.js for a full example. Import the browser version, index-browser.js as an
+logic.js for a full example. Import the browser version, index-browser.js, as an
 EcmaScript module and use like you would use the Node.js version.
 
 Works out of the box in latest Chrome, Edge and Safari.  
-Firefox, however, does not yet support Worker modules yet (tracked in issue
+Firefox, however, does not support Worker modules yet (tracked in issue
 [1247687](https://bugzilla.mozilla.org/show_bug.cgi?id=1247687)), which would be
 required by the implementation in this library.
 To get Firefox to work, you'll need to use a bundler like [Parcel](https://parceljs.org/) or
