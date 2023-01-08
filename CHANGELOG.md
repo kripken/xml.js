@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.0.1
+
+Fixes a broken build for Node in the previous version: Worker path
+was defined relative to the index JS file, when Node actually resolves
+relative Worker paths relative to the current working directory.
+Fix by creating an absolute path with `path.resolve(__dirname, ..)`.
+
 ## 3.0.0
 
 Should not contain breaking changes for most users, but there are
