@@ -1,6 +1,6 @@
-;(function initWorker() {
+; (function initWorker() {
 	// #ifdef node
-	const {parentPort} = require('worker_threads');
+	const { parentPort } = require('worker_threads');
 	// #endif
 
 	function bytesToUtf8(buffer) {
@@ -29,6 +29,7 @@
 		// #ifdef node
 		var data = event;
 		// #endif
+		const wasmMemory = new WebAssembly.Memory({ initial: data.initialMemory, maximum: data.maxMemory ?? 65535 });
 
 		Module({
 			inputFiles: data.inputFiles,
@@ -36,6 +37,8 @@
 			stderr: stderrBuffer.push.bind(stderrBuffer),
 			stdout: stdoutBuffer.push.bind(stdoutBuffer),
 			onExit,
+			INITIAL_MEMORY: data.initialMemory * 65536,
+			wasmMemory,
 			// #ifdef browser
 			locateFile(path) {
 				if (path !== 'xmllint.wasm') {
