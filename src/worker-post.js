@@ -29,7 +29,7 @@
 		// #ifdef node
 		var data = event;
 		// #endif
-		const wasmMemory = new WebAssembly.Memory({ initial: data.initialMemory, maximum: data.maxMemory ?? 65535 });
+		const wasmMemory = new WebAssembly.Memory({ initial: data.initialMemory ?? 256, maximum: data.maxMemory ?? 65535 });
 
 		Module({
 			inputFiles: data.inputFiles,

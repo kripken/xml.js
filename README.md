@@ -59,6 +59,8 @@ async function example() {
     // All the schema files that are required to validate the documents.
     // The main XSD should be first in the array, followed by its possible dependencies.
     schema: [mySchemaFile],
+    initialMemory: 256 // Initial memory capacity in Web Assembly memory pages (1 = 6.4KiB) - 256 is minimum and default here (16MiB)
+    maxMemory: 1234 // Optionally a maximum memory capacity can be set. If ignored this will be set to the maximum supported size (4 GiB)
   });
   
   if (validationResult.valid) {
