@@ -1,6 +1,6 @@
-; (function initWorker() {
+;(function initWorker() {
 	// #ifdef node
-	const { parentPort } = require('worker_threads');
+	const {parentPort} = require('worker_threads');
 	// #endif
 
 	function bytesToUtf8(buffer) {
@@ -29,7 +29,8 @@
 		// #ifdef node
 		var data = event;
 		// #endif
-		const wasmMemory = new WebAssembly.Memory({ initial: data.initialMemory ?? 256, maximum: data.maxMemory ?? 256 });
+		var initialMemory = data.initialMemory || 256;
+		const wasmMemory = new WebAssembly.Memory({ initial: initialMemory, maximum: data.maxMemory || 256 });
 
 		Module({
 			inputFiles: data.inputFiles,
@@ -37,7 +38,6 @@
 			stderr: stderrBuffer.push.bind(stderrBuffer),
 			stdout: stdoutBuffer.push.bind(stdoutBuffer),
 			onExit,
-			INITIAL_MEMORY: data.initialMemory * 65536,
 			wasmMemory,
 			// #ifdef browser
 			locateFile(path) {

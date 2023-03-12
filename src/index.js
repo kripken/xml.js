@@ -1,7 +1,7 @@
 'use strict';
 
 function normalizeInput(fileInput, extension) {
-	if (!Array.isArray(fileInput)) fileInput = [ fileInput ];
+	if (!Array.isArray(fileInput)) fileInput = [fileInput];
 	return fileInput.map((xmlInfo, i) => {
 		if (typeof xmlInfo === 'string') {
 			return {
@@ -18,17 +18,17 @@ function preprocessOptions(options) {
 	const xmls = normalizeInput(options.xml, 'xml');
 	const extension = options.extension || 'schema';
 
-	validateOption([ 'schema', 'relaxng' ], 'extension', extension);
+	validateOption(['schema', 'relaxng'], 'extension', extension);
 	const schemas = normalizeInput(options.schema || [], 'xsd');
 	const preloads = normalizeInput(options.preload || [], 'xml');
 	const normalization = options.normalization || '';
-	validateOption([ '', 'format', 'c14n' ], 'normalization', normalization);
+	validateOption(['', 'format', 'c14n'], 'normalization', normalization);
 
 	const inputFiles = xmls.concat(schemas, preloads);
 	const args = [];
-	schemas.forEach(function (schema) {
+	schemas.forEach(function(schema) {
 		args.push(`--${extension}`);
-		args.push(schema[ 'fileName' ]);
+		args.push(schema['fileName']);
 	});
 
 	if (normalization) {
@@ -38,18 +38,15 @@ function preprocessOptions(options) {
 		args.push('--noout');
 	}
 
-	xmls.forEach(function (xml) {
-		args.push(xml[ 'fileName' ]);
+	xmls.forEach(function(xml) {
+		args.push(xml['fileName']);
 	});
 
-	const opts = { inputFiles, args };
-
-	if (options.initialMemory) {
-		opts.initialMemory = options.initialMemory;
-	}
-	if (options.maxMemory) {
-		opts.maxMemory = options.maxMemory;
-	}
+	const opts = {
+		inputFiles, args,
+		initialMemory: options.initialMemoryPages,
+		maxMemory: options.maxMemoryPages
+	};
 
 	return opts;
 }
@@ -77,7 +74,7 @@ function parseErrors(/** @type {string} */ output) {
 		.slice(0, -2);
 
 	return errorLines.map(line => {
-		const [ fileName, lineNumber, ...rest ] = line.split(':');
+		const [fileName, lineNumber, ...rest] = line.split(':');
 		if (fileName && lineNumber && rest.length) {
 			return {
 				rawMessage: line,
@@ -106,6 +103,7 @@ function parseErrors(/** @type {string} */ output) {
 
 function validateXML(options) {
 	const preprocessedOptions = preprocessOptions(options);
+	var worker;
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
 		function onmessage(event) {
@@ -116,7 +114,6 @@ function validateXML(options) {
 			// #endif
 
 			const valid = validationSucceeded(data.exitCode);
-			worker.terminate();
 			if (valid === null) {
 				const err = new Error(data.stderr);
 				err.code = data.exitCode;
@@ -142,10 +139,10 @@ function validateXML(options) {
 		}
 
 		// #ifdef browser
-		var worker = new Worker(new URL('./xmllint-browser.mjs', import.meta.url), { type: 'module' });
+		worker = new Worker(new URL('./xmllint-browser.mjs', import.meta.url), { type: 'module' });
 		// #ifdef node
-		const { Worker } = require('worker_threads');
-		var worker = new Worker(require('path').resolve(__dirname, './xmllint-node.js'));
+		const {Worker} = require('worker_threads');
+		worker = new Worker(require('path').resolve(__dirname, './xmllint-node.js'));
 		// #endif
 
 		// #ifdef browser
@@ -157,11 +154,19 @@ function validateXML(options) {
 		addEventListener('message', onmessage);
 		addEventListener('error', onerror);
 		worker.postMessage(preprocessedOptions);
-	});
+	}).finally(() => worker.terminate());
 }
 
+const memoryPages = {
+	MiB: 16,
+	GiB: 16384,
+	default: 256,
+	max: 65536
+};
+
 // #ifdef browser
-export { validateXML };
+export { validateXML, memoryPages };
 // #ifdef node
 module.exports.validateXML = validateXML;
+module.exports.memoryPages = memoryPages;
 // #endif

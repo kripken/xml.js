@@ -35,9 +35,9 @@ export type XMLLintOptions = {
    */
   readonly extension?: 'schema' | 'relaxng';
 
-  readonly initialMemory?: number;
+  readonly initialMemoryPages?: number;
 
-  readonly maxMemory?: number;
+  readonly maxMemoryPages?: number;
 } & (Schema | Normalization | (Schema & Normalization));
 
 export type XMLValidationError = {
