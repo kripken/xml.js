@@ -116,6 +116,7 @@ function validateXML(options) {
 			// #endif
 
 			const valid = validationSucceeded(data.exitCode);
+			worker.terminate();
 			if (valid === null) {
 				const err = new Error(data.stderr);
 				err.code = data.exitCode;
