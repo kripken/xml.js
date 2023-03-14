@@ -1,5 +1,13 @@
 'use strict';
 
+/** @type {import("./index").MemoryPagesConstant} */
+const memoryPages = {
+	MiB: 16,
+	GiB: 16384,
+	default: 256,
+	max: 65536
+};
+
 function normalizeInput(fileInput, extension) {
 	if (!Array.isArray(fileInput)) fileInput = [fileInput];
 	return fileInput.map((xmlInfo, i) => {
@@ -42,13 +50,11 @@ function preprocessOptions(options) {
 		args.push(xml['fileName']);
 	});
 
-	const opts = {
+	return {
 		inputFiles, args,
-		initialMemory: options.initialMemoryPages,
-		maxMemory: options.maxMemoryPages
+		initialMemory: options.initialMemoryPages || memoryPages.default,
+		maxMemory: options.maxMemoryPages || memoryPages.default,
 	};
-
-	return opts;
 }
 
 function validationSucceeded(exitCode) {
@@ -101,6 +107,7 @@ function parseErrors(/** @type {string} */ output) {
 	});
 }
 
+/** @type {import("./index").validateXML} */
 function validateXML(options) {
 	const preprocessedOptions = preprocessOptions(options);
 	var worker;
@@ -156,13 +163,6 @@ function validateXML(options) {
 		worker.postMessage(preprocessedOptions);
 	}).finally(() => worker.terminate());
 }
-
-const memoryPages = {
-	MiB: 16,
-	GiB: 16384,
-	default: 256,
-	max: 65536
-};
 
 // #ifdef browser
 export { validateXML, memoryPages };

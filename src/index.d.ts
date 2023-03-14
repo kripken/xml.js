@@ -82,3 +82,26 @@ export interface XMLValidationResult {
 }
 
 export function validateXML(options: XMLLintOptions): Promise<XMLValidationResult>;
+
+interface MemoryPagesConstant {
+	/**
+	 * 1MiB as a number of 64KiB Web Assembly pages.
+	 */
+	readonly MiB: number;
+	/**
+	 * 1GiB as a number of 64KiB Web Assembly pages.
+	 */
+	readonly GiB: number;
+	/**
+	 * The default number of 64KiB Web Assembly pages for both
+	 * the initial and maximum memory.
+	 */
+	readonly default: number;
+	/**
+	 * The maximum number of 64KiB Web Assembly pages for the
+	 * maxMemoryPages option.
+	 */
+	readonly max: number;
+};
+
+export const memoryPages: MemoryPagesConstant;

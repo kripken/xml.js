@@ -1,11 +1,12 @@
 {
 	"extends": "../.eslintrc.json",
 	"globals": {
-		"Module": false,
-		"FS": false,
-		"intArrayFromString": false,
-		"postMessage": false,
-		"addEventListener": false
+		"Module": "readonly",
+		"FS": "readonly",
+		"intArrayFromString": "readonly",
+		"postMessage": "readonly",
+		"addEventListener": "readonly",
+		"WebAssembly": "readonly"
 	},
 	"rules": {
 		"no-extra-semi": "off",

@@ -97,3 +97,26 @@ export type XMLValidationResult = {|
 |}
 
 declare export function validateXML(options: XMLLintOptions): Promise<XMLValidationResult>;
+
+declare type MemoryPagesConstant = {|
+	/**
+	 * 1MiB as a number of 64KiB Web Assembly pages.
+	 */
+	+MiB: number;
+	/**
+	 * 1GiB as a number of 64KiB Web Assembly pages.
+	 */
+	+GiB: number;
+	/**
+	 * The default number of 64KiB Web Assembly pages for both
+	 * the initial and maximum memory.
+	 */
+	+default: number;
+	/**
+	 * The maximum number of 64KiB Web Assembly pages for the
+	 * maxMemoryPages option.
+	 */
+	+max: number;
+|};
+
+declare export var memoryPages: MemoryPagesConstant;
