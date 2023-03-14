@@ -39,7 +39,7 @@ why Node >= 10.5 is required.
 
 ## API
 
-Type definitions at [index.d.ts](index.d.ts).
+See type definitions at [index.d.ts](./src/index.d.ts).
 
 ### Basic usage
 ```javascript
