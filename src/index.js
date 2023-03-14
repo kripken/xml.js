@@ -4,7 +4,8 @@
 const memoryPages = {
 	MiB: 16,
 	GiB: 16384,
-	default: 256,
+	defaultInitialMemoryPages: 256 /* 16MiB */,
+	defaultMaxMemoryPages: 512 /* 32MiB */,
 	max: 65536
 };
 
@@ -52,8 +53,8 @@ function preprocessOptions(options) {
 
 	return {
 		inputFiles, args,
-		initialMemory: options.initialMemoryPages || memoryPages.default,
-		maxMemory: options.maxMemoryPages || memoryPages.default,
+		initialMemory: options.initialMemoryPages || memoryPages.defaultInitialMemoryPages,
+		maxMemory: options.maxMemoryPages || memoryPages.defaultMaxMemoryPages,
 	};
 }
 

@@ -93,13 +93,17 @@ interface MemoryPagesConstant {
 	 */
 	readonly GiB: number;
 	/**
-	 * The default number of 64KiB Web Assembly pages for both
-	 * the initial and maximum memory.
+	 * The default number of 64KiB Web Assembly pages for
+	 * the initialMemoryPages option (16MiB).
 	 */
-	readonly default: number;
+	readonly defaultInitialMemoryPages: number;
 	/**
-	 * The maximum number of 64KiB Web Assembly pages for the
-	 * maxMemoryPages option.
+	 * The default value for the maxMemoryPages option, which defines
+	 * the upper limit number of 64KiB Web Assembly pages (32MiB).
+	 */
+	readonly defaultMaxMemoryPages: number;
+	/**
+	 * The maximum possible value for the memory options (4GiB).
 	 */
 	readonly max: number;
 };
