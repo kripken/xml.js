@@ -46,9 +46,11 @@ Type definitions at [index.d.ts](index.d.ts).
 const {validateXML, memoryPages} = require('xmllint-wasm');
 
 async function example() {
-  const [myXMLFile, mySchemaFile] = await Promise.all([
+  const [myXMLFile, mySchemaFile, generalXmlXsdFile] = await Promise.all([
     fs.promises.readFile('./my-xml-file.xml', 'utf8'),
-    fs.promises.readFile('./my-schema-file.xml', 'utf8'),
+    fs.promises.readFile('./my-schema-file.xsd', 'utf8'),
+    // Some other XSD file that our main schema my-schema-file.xsd happens to depend on
+    fs.promises.readFile('./xml.xsd', 'utf8'),
   ])
 
   const validationResult = await validateXML({
@@ -59,8 +61,15 @@ async function example() {
     // All the schema files that are required to validate the documents.
     // The main XSD should be first in the array, followed by its possible dependencies.
     schema: [mySchemaFile],
+    // Optional: Files that the schema file depends on (xsd:import, xsd:include).
+    // xmllint-wasm won't make any network requests or other IO to retrieve depdencicy files,
+    // so these they must be loaded beforehand and passed in here.
+    preload: [{
+      fileName: 'xml.xsd',
+      contents: generalXmlXsdFile,
+    }],
     // Optional: Initial memory capacity in Web Assembly memory pages (1 = 6.4KiB) - 256
-    // is minimum and default here (16MiB)
+    // is minimum and default here (16MiB).
     initialMemoryPages: 256,
     // Optional: Maximum memory capacity, in Web Assembly memory pages. If not
     // set, this will also default to 256 pages. Max is 65536 (4GiB).
