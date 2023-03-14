@@ -34,6 +34,10 @@ export type XMLLintOptions = {
    * @default 'schema'
    */
   readonly extension?: 'schema' | 'relaxng';
+
+  readonly initialMemoryPages?: number;
+
+  readonly maxMemoryPages?: number;
 } & (Schema | Normalization | (Schema & Normalization));
 
 export type XMLValidationError = {

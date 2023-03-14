@@ -29,6 +29,8 @@
 		// #ifdef node
 		var data = event;
 		// #endif
+		var initialMemory = data.initialMemory || 256;
+		const wasmMemory = new WebAssembly.Memory({ initial: initialMemory, maximum: data.maxMemory || 256 });
 
 		Module({
 			inputFiles: data.inputFiles,
@@ -36,6 +38,7 @@
 			stderr: stderrBuffer.push.bind(stderrBuffer),
 			stdout: stdoutBuffer.push.bind(stdoutBuffer),
 			onExit,
+			wasmMemory,
 			// #ifdef browser
 			locateFile(path) {
 				if (path !== 'xmllint.wasm') {

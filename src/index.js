@@ -42,7 +42,13 @@ function preprocessOptions(options) {
 		args.push(xml['fileName']);
 	});
 
-	return {inputFiles, args};
+	const opts = {
+		inputFiles, args,
+		initialMemory: options.initialMemoryPages,
+		maxMemory: options.maxMemoryPages
+	};
+
+	return opts;
 }
 
 function validationSucceeded(exitCode) {
@@ -97,6 +103,7 @@ function parseErrors(/** @type {string} */ output) {
 
 function validateXML(options) {
 	const preprocessedOptions = preprocessOptions(options);
+	var worker;
 
 	return new Promise(function validateXMLPromiseCb(resolve, reject) {
 		function onmessage(event) {
@@ -132,10 +139,10 @@ function validateXML(options) {
 		}
 
 		// #ifdef browser
-		var worker = new Worker(new URL('./xmllint-browser.mjs', import.meta.url), {type: 'module'});
+		worker = new Worker(new URL('./xmllint-browser.mjs', import.meta.url), { type: 'module' });
 		// #ifdef node
 		const {Worker} = require('worker_threads');
-		var worker = new Worker(require('path').resolve(__dirname, './xmllint-node.js'));
+		worker = new Worker(require('path').resolve(__dirname, './xmllint-node.js'));
 		// #endif
 
 		// #ifdef browser
@@ -147,11 +154,19 @@ function validateXML(options) {
 		addEventListener('message', onmessage);
 		addEventListener('error', onerror);
 		worker.postMessage(preprocessedOptions);
-	});
+	}).finally(() => worker.terminate());
 }
 
+const memoryPages = {
+	MiB: 16,
+	GiB: 16384,
+	default: 256,
+	max: 65536
+};
+
 // #ifdef browser
-export { validateXML };
+export { validateXML, memoryPages };
 // #ifdef node
 module.exports.validateXML = validateXML;
+module.exports.memoryPages = memoryPages;
 // #endif

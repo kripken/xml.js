@@ -5,6 +5,9 @@ set -eu
 function use_emcc() {
 	emcc -Os -s WASM=1 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
 		-s MODULARIZE=1 \
+		-s IMPORTED_MEMORY \
+		-s ALLOW_MEMORY_GROWTH \
+		-s MAXIMUM_MEMORY=4GB \
 		-s NO_EXIT_RUNTIME=0 \
 		-s EXPORT_NAME=Module \
 		--closure 1 \
