@@ -34,9 +34,21 @@ export type XMLLintOptions = {
    * @default 'schema'
    */
   readonly extension?: 'schema' | 'relaxng';
-
+	/*
+	* Maximum memory capacity, in Web Assembly memory pages. If not
+	* set, this will also default to 256 pages. Max is 65536 (4GiB).
+	* Use this to raise the memory limit if your XML to validate are large enough to
+	* cause out of memory errors.
+	* The following example would set the max memory to 2GiB.
+	*/
   readonly initialMemoryPages?: number;
-
+	/*
+	* Maximum memory capacity, in Web Assembly memory pages. If not
+	* set, this will also default to 256 pages. Max is 65536 (4GiB).
+	* Use this to raise the memory limit if your XML to validate are large enough to
+	* cause out of memory errors.
+	* The following example would set the max memory to 2GiB.
+	*/
   readonly maxMemoryPages?: number;
 } & (Schema | Normalization | (Schema & Normalization));
 
