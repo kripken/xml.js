@@ -51,11 +51,15 @@ function preprocessOptions(options) {
 		args.push(xml['fileName']);
 	});
 
-	return {
+	const opts = {
 		inputFiles, args,
 		initialMemory: options.initialMemoryPages || memoryPages.defaultInitialMemoryPages,
 		maxMemory: options.maxMemoryPages || memoryPages.defaultMaxMemoryPages,
 	};
+
+	validateMemoryLimitOptions(opts);
+
+	return opts;
 }
 
 function validationSucceeded(exitCode) {
@@ -72,6 +76,15 @@ function validateOption(allowedValues, optionName, actualValue) {
 	if (!allowedValues.includes(actualValue)) {
 		const actualValueStr = typeof actualValue === 'string' ? `"${actualValue}"` : actualValue;
 		throw new Error(`Invalid value for option ${optionName}: ${actualValueStr}`);
+	}
+}
+
+function validateMemoryLimitOptions({initialMemory, maxMemory}) {
+	if (initialMemory < 0 || maxMemory < initialMemory || maxMemory > memoryPages.max) {
+		throw new Error(
+			'Invalid memory options.'
+			+ ` Expected 0 < initialMemoryPages (${initialMemory}) <= maxMemoryPages (${maxMemory}) <= 4GiB (${memoryPages.max})`
+		);
 	}
 }
 
