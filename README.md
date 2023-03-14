@@ -43,7 +43,7 @@ Type definitions at [index.d.ts](index.d.ts).
 
 ### Basic usage
 ```javascript
-const {validateXML} = require('xmllint-wasm');
+const {validateXML, memoryPages} = require('xmllint-wasm');
 
 async function example() {
   const [myXMLFile, mySchemaFile] = await Promise.all([
@@ -59,8 +59,15 @@ async function example() {
     // All the schema files that are required to validate the documents.
     // The main XSD should be first in the array, followed by its possible dependencies.
     schema: [mySchemaFile],
-    initialMemoryPages: 256 // Initial memory capacity in Web Assembly memory pages (1 = 6.4KiB) - 256 is minimum and default here (16MiB)
-    maxMemoryPages: 1234 // Optionally a maximum memory capacity can be set. If not set this will also default to 256 pages. Max is 65536 (4GiB)
+    // Optional: Initial memory capacity in Web Assembly memory pages (1 = 6.4KiB) - 256
+    // is minimum and default here (16MiB)
+    initialMemoryPages: 256,
+    // Optional: Maximum memory capacity, in Web Assembly memory pages. If not
+    // set, this will also default to 256 pages. Max is 65536 (4GiB).
+    // Use this to raise the memory limit if your XML to validate are large enough to
+    // cause out of memory errors.
+    // The following example would set the max memory to 2GiB.
+    maxMemoryPages: 2 * memoryPages.GiB,
   });
   
   if (validationResult.valid) {
