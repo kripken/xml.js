@@ -1,14 +1,14 @@
 export type XMLString = string;
 
-export type XMLFileInfo = {
+export interface XMLFileInfo {
   readonly fileName: string;
   readonly contents: XMLString;
 };
 
 export type XMLInput = XMLString | XMLFileInfo;
 
-type Schema = { readonly schema: XMLInput | ReadonlyArray<XMLInput> };
-type Normalization = {
+interface Schema { readonly schema: XMLInput | ReadonlyArray<XMLInput> };
+interface Normalization {
   /**
    * Pass either --format or --c14n to xmllint to get a formatted
    * version of the input document to "normalized" property of the result.
@@ -18,7 +18,7 @@ type Normalization = {
   readonly normalization: 'format' | 'c14n';
 };
 
-export type XMLLintOptions = {
+interface XMLLintOptionsBase {
   /**
    * XML file contents to validate.
    * Note that xmllint only supports UTF-8 encoded files.
@@ -50,9 +50,11 @@ export type XMLLintOptions = {
 	* The following example would set the max memory to 2GiB.
 	*/
   readonly maxMemoryPages?: number;
-} & (Schema | Normalization | (Schema & Normalization));
+}
 
-export type XMLValidationError = {
+export type XMLLintOptions = XMLLintOptionsBase & (Schema | Normalization | (Schema & Normalization));
+
+export interface XMLValidationError {
   readonly rawMessage: string;
   /**
    * Error message without the file name and line number.
@@ -68,7 +70,7 @@ export type XMLValidationError = {
   };
 };
 
-export type XMLValidationResult = {
+export interface XMLValidationResult {
   readonly valid: boolean;
   readonly errors: ReadonlyArray<XMLValidationError>;
   readonly rawOutput: string;
