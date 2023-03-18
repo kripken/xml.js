@@ -8,9 +8,10 @@
     "test": "test"
   },
   "scripts": {
-    "test": "./script/test",
+    "test": "node test/test.js",
     "lint": "eslint src",
-    "check-types": "./typings-test/run-typings-test.sh"
+    "check-types": "./typings-test/run-typings-test.sh",
+    "build": "./script/clean && ./script/run-with-emscripten ./script/libxml2 && ./script/run-with-emscripten ./script/compile"
   },
   "repository": {
     "type": "git",

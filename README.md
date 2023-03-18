@@ -143,6 +143,15 @@ import * as xmllint from './node_modules/xmllint/index-browser.mjs';
 ## Building xmllint from source
 
 Clone the project (including the submodulem with git `--recursive`) and build.  
+
+### With Docker or Podman
+
+```sh
+  npm run build
+```
+
+### With locally installed Emscripten
+
 [Install emscripten](https://emscripten.org/docs/getting_started/downloads.html#installation-instructions-using-the-emsdk-recommended)
 and source their shell env.  
 Finally, run the commands for Emscripten build
@@ -153,4 +162,4 @@ Finally, run the commands for Emscripten build
   ./script/compile
   ./script/test
 ```
-There might also be some other build dependencies not listed here, I'm afraid.
+There might also be some other system dependencies required for the build that are not listed here.
