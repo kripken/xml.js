@@ -2,15 +2,13 @@ name: Build and test
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
-    outputs:
-      pkg: ${{ steps.package.outputs.pkg }}
     steps:
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
@@ -18,14 +16,31 @@ jobs:
         with:
           node-version: 18.x
       - run: npm ci
+      - run: npm run lint
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+      - run: npm ci
       - run: npm run build
       - run: npm pack
-      - id: package
-        run: cat xmllint-wasm-*.tgz >> "$GITHUB_OUTPUT"
+      - run: mv xmllint-wasm-*.tgz xmllint-wasm.tgz
+      - name: Create package output
+        uses: actions/upload-artifact@v3
+        with:
+          name: xmllint-wasm package
+          path: xmllint-wasm.tgz
 
   test:
     runs-on: ubuntu-latest
-    needs: build
+    needs: [lint, build]
 
     strategy:
       matrix:
@@ -33,12 +48,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - uses: actions/download-artifact@v3
+        with:
+          name: xmllint-wasm package
+          path: ~/package-output
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - run: echo ${{ needs.build.outputs.pkg }} > xmllint-wasm.tgz
-      - run: npm install xmllint-wasm.tgz
+      # "Rename" the package for testing so that npm will agree to install the
+      # same package from the built tarball.
+      - run: |
+          sed -i 's/"name": "xmllint-wasm"/"name": "xmllint-wasm-test"/;' package.json
+      # Install the package from the artifact
+      - run: npm install file:~/package-output/xmllint-wasm.tgz
+      - run: cp node_modules/xmllint-wasm/index-node{.d.ts,.js.flow} .
+      # Add a dummy index.js file so that test/test.js can do require('../index-node.js')
       - run: echo "module.exports = require('xmllint-wasm')" > index-node.js
+      - run: npm run check-types
       - run: npm test

@@ -22,3 +22,5 @@ index-node.d.ts
 index-node.js.flow
 
 /browser-demo/html-data/xmllint
+
+xmllint-wasm-*.tgz
