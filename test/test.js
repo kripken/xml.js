@@ -128,12 +128,46 @@ async function testWithTwoFiles() {
 	assert.deepEqual(result, expectedResultForBoth);
 }
 
+async function testWithLargeFile() {
+	// Takes the first item XML from the test file. I know I know, never parse
+	// XML with regex, but this is good enough for our test case.
+	const [partToRepliacate] = xmlValid.match(/<item\b(?:.|[\r\n])*<\/item>/) || [];
+	if (!partToRepliacate) {
+		throw new Error('Could not find item in test file.');
+	}
+	// Make a large XML file by repeating the item 50 000 times.
+	// This will take about 40MB.
+	const xml = xmlValid.replace(partToRepliacate, partToRepliacate.repeat(50000));
+	let error = 'No error';
+	try {
+		await xmllint.validateXML({
+			xml,
+			...schemaOptions,
+		});
+	} catch (err) {
+		error = String(err);
+	}
+	assert.match(error, /out of memory/);
+
+	// Should pass if we increase the max heap size.
+	const result = await xmllint.validateXML({
+		xml,
+		...schemaOptions,
+		// This is not really relevant for the passing of the test, but included
+		// here for a sanity check that the option doesn't blow things up either.
+		initialMemoryPages: xmllint.memoryPages.MiB * 30,
+		maxMemoryPages: xmllint.memoryPages.GiB,
+	});
+	assert(result.valid);
+}
+
 async function runTests(...tests) {
 	for (const test of tests) {
 		try {
 			await test();
 		} catch(err) {
-			console.error(`Test ${test.name} failed. ${err.message}`);
+			console.error(err);
+			console.error(`Test ${test.name} failed. See the error above`);
 			return process.exit(1);
 		}
 	}
@@ -147,4 +181,5 @@ runTests(
 	testWithValidFileForC14n,
 	testWithInvalidFile,
 	testWithTwoFiles,
+	testWithLargeFile,
 );
