@@ -143,7 +143,7 @@ import * as xmllint from './node_modules/xmllint/index-browser.mjs';
 
 ## Building xmllint from source
 
-Clone the project (including the submodulem with git `--recursive`) and build.  
+Clone the project (including the submodules with git `--recursive`) and build.  
 
 ### With Docker or Podman
 
