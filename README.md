@@ -19,11 +19,12 @@ instead.
 
 ## Overview of changes made to the original project
 
-* libxml2 version is upgraded to v2.9.12
+* libxml2 version is upgraded to v2.10.3
 * The output is wasm instead of asm.js
-* Target environment is Node 10.5 or newer instead of the browser
+* In addition to modern browsers with wasm support, works in Node.js 12 or later
 * Library size is quite a bit smaller, the wasm file and wrapper js files
   weigh about 860K combined
+* Allows normalization / formatting of the input XML in addition to validation
 * There are some changes to the API, which is described in more detail
   below. Overall this project behaves more like a library that you'd call from
   a JS application, instead of like a command-line tool that xmllint normally is.
@@ -35,7 +36,7 @@ npm i xmllint-wasm
 The library uses Node.js [Worker threads](https://nodejs.org/api/worker_threads.html)
 to isolate the Emscripten wrapper from your main process (so that
 when it calls process.exit your whole server won't go down), which is
-why Node >= 10.5 is required.
+why Node >= 12 is required.
 
 ## API
 
