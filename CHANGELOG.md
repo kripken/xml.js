@@ -1,5 +1,27 @@
 # Changelog
 
+## 4.0.0
+
+Add two new options, `initialMemoryPages` and `maxMemoryPages`, to control
+how much memory the WebAssembly module allocates by default and is allowed
+to allocate for the validation. 
+[PR #16](https://github.com/noppa/xmllint-wasm/pull/13),
+fixes [issue #8](https://github.com/noppa/xmllint-wasm/issues/8).  
+Thanks [@MLSTRM](https://github.com/MLSTRM)!
+
+The "**breaking change**" here is that we also raise the default maximum
+memory cap from the old implicit 16MiB to double of that, 32MiB.  
+With this new default, you may not even need to use the `maxMemoryPages` option
+yourself, as 32MiB is probably already high enough for quite a lot of use cases.
+
+In some _very_ memory constrained environments, this raised limit could impose
+a problem if it causes the main process to run out of memory, so that's why
+I'm calling it a breaking change. For most applications, though, this should
+not be a problem. You can opt into the old limit by setting
+```javascript
+  maxMemoryPages: 16 * xmllint.memoryPages.MiB,
+```
+
 ## 3.0.1
 
 Fixes a broken build for Node in the previous version: Worker path
