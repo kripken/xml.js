@@ -135,9 +135,9 @@ async function testWithLargeFile() {
 	if (!partToRepliacate) {
 		throw new Error('Could not find item in test file.');
 	}
-	// Make a large XML file by repeating the item 50 000 times.
-	// This will take about 40MB.
-	const xml = xmlValid.replace(partToRepliacate, partToRepliacate.repeat(50000));
+	// Make a large XML file by repeating the item 100 000 times.
+	// This will take about 90MB.
+	const xml = xmlValid.replace(partToRepliacate, partToRepliacate.repeat(100000));
 	let error = 'No error';
 	try {
 		await xmllint.validateXML({
