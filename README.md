@@ -5,7 +5,7 @@ argument used will be ```--relaxng``` instead of ```--schema```. Otherwise
 
 -----------------------------------------------------------------------------------
 
-Online demo at [http://syssgx.github.com/xml.js/](https://syssgx.github.io/xml.js/)
+Online demo at [http://syssgx.github.io/xml.js/](https://syssgx.github.io/xml.js/)
 
 This package exports the `xmllint` object which is an Emscripten port of
 libxml2's `xmllint` command for use in the browser or node.
