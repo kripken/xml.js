@@ -2,4 +2,10 @@
 
 rm -rf ./build
 rm -rf ./libxml2/compile
-rm -rf ./libxml2/m4
+
+# some file in ./libxml2/m4 are provided by the project
+rm -f ./libxml2/m4/libtool.m4
+rm -f ./libxml2/m4/lt~obsolete.m4
+rm -f ./libxml2/m4/ltoptions.m4
+rm -f ./libxml2/m4/ltsugar.m4
+rm -f ./libxml2/m4/ltversion.m4

@@ -1,8 +1,7 @@
 #!/bin/bash
 
 emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 \
-	--memory-init-file 0 \
-	./build/xmllint.o ./build/.libs/libxml2.a ./libz.a \
+	./build/xmllint-xmllint.o ./build/.libs/libxml2.so ./libz.a \
 	-o xmllint.raw.js --pre-js ./src/pre.js
 
 sed '/\/\* XMLLINT.RAW.JS \*\// {

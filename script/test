@@ -1,7 +1,7 @@
 #!/bin/bash
 
-emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 ./build/xmllint.o \
-	./build/.libs/libxml2.a ./libz.a -o ./xmllint.test.js \
+emcc -O2 -s EMULATE_FUNCTION_POINTER_CASTS=1 ./build/xmllint-xmllint.o \
+	./build/.libs/libxml2.so ./libz.a -o ./xmllint.test.js \
 	--embed-file ./test/test.xml --embed-file ./test/test.xsd
 node ./xmllint.test.js --noout --schema ./test/test.xsd ./test/test.xml
 rm -rf ./xmllint.test.js
